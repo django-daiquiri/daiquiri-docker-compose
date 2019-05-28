@@ -1,3 +1,4 @@
 vol/
 docker-compose.yaml
 *.local
+daiquiri/rootfs/tmp/template-local.py
