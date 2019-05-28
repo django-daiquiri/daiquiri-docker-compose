@@ -1,0 +1,89 @@
+version: "3.7"
+
+volumes:
+    log:
+        name: <GLOBAL_PREFIX>log
+        driver_opts:
+            type: none
+            device: <CURDIR>/vol/log
+            o: bind
+    download:
+        name: <GLOBAL_PREFIX>download
+        driver_opts:
+            type: none
+            device: <CURDIR>/vol/download
+            o: bind
+    postgresapp:
+        name: <GLOBAL_PREFIX>postgresapp
+        driver_opts:
+            type: none
+            device: <CURDIR>/vol/postgres-app
+            o: bind
+    postgresdata:
+         name: <GLOBAL_PREFIX>postgresdata
+         driver_opts:
+            type: none
+            device: <CURDIR>/vol/postgres-data
+            o: bind
+    daiquiriapp:
+        name: <GLOBAL_PREFIX>daiquiriapp
+        driver_opts:
+            type: none
+            device: <CURDIR>/vol/daiquiri-app
+            o: bind
+    ve:
+        name: <GLOBAL_PREFIX>ve
+        driver_opts:
+            type: none
+            device: <CURDIR>/vol/ve
+            o: bind
+
+services:
+    apache:
+        build:
+            context: ./apache
+        container_name: <GLOBAL_PREFIX>apache
+        ports:
+            - "<FINALLY_EXPOSED_PORT>:80"
+        volumes:
+            - log:/vol/log
+            - log:/vol/download
+            - daiquiriapp:/vol/daiquiri-app
+            - ve:/vol/ve
+        env_file:
+            - <VARIABLES_FILE>
+        depends_on:
+            - daiquiri
+
+    postgresapp:
+        build:
+            context: ./postgresapp
+        container_name: <GLOBAL_PREFIX>postgresapp
+        volumes:
+            - postgresapp:/var/lib/postgresql/data
+        env_file:
+            - <VARIABLES_DB_APP>
+
+    postgresdata:
+        build:
+            context: ./postgresdata
+        container_name: <GLOBAL_PREFIX>postgresdata
+        volumes:
+            - postgresdata:/var/lib/postgresql/data
+        env_file:
+            - <VARIABLES_DB_DATA>
+
+    daiquiri:
+        build:
+            context: ./daiquiri
+        container_name: <GLOBAL_PREFIX>daiquiri
+        depends_on:
+            - postgresapp
+            - postgresdata
+        volumes:
+            - log:/vol/log
+            - download:/vol/download
+            - daiquiriapp:/vol/daiquiri-app
+            - ve:/vol/ve
+        env_file:
+            - <VARIABLES_FILE>

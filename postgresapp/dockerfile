@@ -1,0 +1,11 @@
+FROM postgres:latest
+
+ENV PATH="${PATH}:/opt"
+
+RUN apt update -y && apt install \
+    postgresql-client
+
+# create DB, user, permissions
+
+# not necessary, but for sake of clarity
+CMD ["postgres"]

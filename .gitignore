@@ -1,0 +1,3 @@
+vol/
+docker-compose.yaml
+*.local
