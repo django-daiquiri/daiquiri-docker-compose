@@ -23,7 +23,8 @@ During build four folders later used as volumes will be created under `vol/`. Th
 ## Configuration & Usage
 1. Declare your settings in `variables.local`
 
-    Default settings are stored in the `variables.env` and is overwritten with each pull. To keep the local changes, copy the `variables.env` file to `variables.local` and edit it.
+    Default settings are stored in the 
+   `var/` folder. all `*.env` files are overwritten with each pull. To keep the local changes, copy `var/app.env` file to `var/app.local` and edit it. Same goes for the DB settings in `var/postgresapp.env` and `var/postgresdata.env`
 
     The `makefile` will use the `variables.local` file if such a file exists. 
 
@@ -36,22 +37,12 @@ During build four folders later used as volumes will be created under `vol/`. Th
     ```shell
     # connect to the docker
     docker exec -ti daiquiri bash
-
-    # do either
-    python manage.py createsuperuser
     ```
-
-1. Create PostgreSQL app data DB
-  ...
-
-1. Create PostgreSQL test data DB
-
-    ...
 
 
 ## Multiple Daiquiri instances on a single docker host
 You can have multiple running Daiquiri instances on a single docker host as long as you pay attention to three things.
 
 1. Use different folders containing the Daiquiri `docker-compose` repo to make sure docker-compose considers your build attempts to be different projects. Unfortunately currently there is no manual configuration for this because the `COMPOSE_PROJECT_NAME` option seems to be broken.
-1. Make sure to use different `GLOBAL_PREFIX` settings in your `variables.local` to avoid conflicts between your docker containers and volumes.
+1. Make sure to use different `GLOBAL_PREFIX` settings in your `var/app.local` to avoid conflicts between your docker containers and volumes.
 1. And obviously change the `FINALLY_EXPOSED_PORT` settings to make sure to use a free port to expose Daiquiri.
