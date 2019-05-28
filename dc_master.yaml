@@ -47,7 +47,6 @@ services:
             - "<FINALLY_EXPOSED_PORT>:80"
         volumes:
             - log:/vol/log
-            - log:/vol/download
             - daiquiriapp:/vol/daiquiri-app
             - ve:/vol/ve
         env_file:
