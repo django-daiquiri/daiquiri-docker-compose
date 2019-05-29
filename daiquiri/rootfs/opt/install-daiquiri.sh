@@ -10,7 +10,7 @@ if [[ $(pip freeze | grep -Poc "^daiquiri==") == "0" ]]; then
     git clone -b dev ${DAIQUIRI_REPO} ${DAIQUIRI_APP}/daiquiri
 
     mkdir -p ${DAIQUIRI_APP}/app/config
-    cp -f /tmp/wsgi.py ${DAIQUIRI_APP}/app/config/wsgi.py
+    cp -f /tmp/wsgi.py ${DAIQUIRI_APP}/app/wsgi.py
 
     pip install --upgrade pip
     pip install --upgrade wheel
@@ -20,11 +20,8 @@ if [[ $(pip freeze | grep -Poc "^daiquiri==") == "0" ]]; then
 
     # pip installs
     cd ${DAIQUIRI_APP}/app
-    echo "***pip install -e daiquiri***"
     pip3 install -e ${DAIQUIRI_APP}/daiquiri
-    echo "***cp files***"
     cp -f /tmp/template_local.py ${DAIQUIRI_APP}/app/config/settings/local.py
-    echo "***manage.py***"
     python ./manage.py makemigrations
     python manage.py migrate
     mkdir -p ${DAIQUIRI_APP}/app/vendor

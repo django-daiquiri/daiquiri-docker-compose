@@ -29,7 +29,7 @@ volumes:
         name: <GLOBAL_PREFIX>daiquiriapp
         driver_opts:
             type: none
-            device: <CURDIR>/vol/daiquiri-app/app
+            device: <CURDIR>/vol/daiquiri-app
             o: bind
     ve:
         name: <GLOBAL_PREFIX>ve
@@ -82,8 +82,8 @@ services:
             - postgresapp
             - postgresdata
         volumes:
-            - log:/vol/log
-            - download:/vol/download
+            - log:<LOGGING_DIR>
+            - download:<DOWNLOAD_DIR>
             - daiquiriapp:/vol/daiquiri-app
             - ve:/vol/ve
         env_file:

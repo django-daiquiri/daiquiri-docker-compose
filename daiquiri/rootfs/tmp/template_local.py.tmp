@@ -91,9 +91,8 @@ http://rdmo.readthedocs.io/en/latest/configuration/email.html
 
 SENDFILE_BACKEND = 'sendfile.backends.xsendfile'
 
-LOGGING_DIR = os.environ['LOGGING_DIR']
-
-QUERY_DOWNLOAD_DIR = os.environ['DOWNLOAD_DIR']
+LOGGING_DIR = <LOGGING_DIR>
+QUERY_DOWNLOAD_DIR = <DOWNLOAD_DIR>
 
 
 # WORDPRESS_PATH = ''
