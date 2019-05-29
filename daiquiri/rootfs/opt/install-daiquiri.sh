@@ -4,19 +4,19 @@ source /opt/ve.sh
 
 if [[ $(pip freeze | grep -Poc "^daiquiri==") == "0" ]]; then
 
-    mkdir ${DAIQUIRI_APP}/config
-    cp -f /tmp/wsgi.py ${DAIQUIRI_APP}/config/wsgi.py
+    # Get repos
+    echo "***GIT CLONE***"
+    git clone -b dev ${DAIQUIRI_APP_REPO} ${DAIQUIRI_APP}/app
+    git clone -b dev ${DAIQUIRI_REPO} ${DAIQUIRI_APP}/daiquiri
+
+    mkdir -p ${DAIQUIRI_APP}/app/config
+    cp -f /tmp/wsgi.py ${DAIQUIRI_APP}/app/config/wsgi.py
 
     pip install --upgrade pip
     pip install --upgrade wheel
     pip install --upgrade setuptools
     pip install psycopg2
     pip install astropy
-
-    # Get repos
-    echo "***GIT CLONE***"
-    git clone -b dev ${DAIQUIRI_APP_REPO} ${DAIQUIRI_APP}/app
-    git clone -b dev ${DAIQUIRI_REPO} ${DAIQUIRI_APP}/daiquiri
 
     # pip installs
     cd ${DAIQUIRI_APP}/app
@@ -27,7 +27,7 @@ if [[ $(pip freeze | grep -Poc "^daiquiri==") == "0" ]]; then
     echo "***manage.py***"
     python ./manage.py makemigrations
     python manage.py migrate
-    mkdir ${DAIQUIRI_APP}/app/vendor
+    mkdir -p ${DAIQUIRI_APP}/app/vendor
     python manage.py download_vendor_files
     python manage.py collectstatic --no-input
 

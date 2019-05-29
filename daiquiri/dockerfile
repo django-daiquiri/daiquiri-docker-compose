@@ -29,7 +29,7 @@ RUN apt install -y \
 COPY ./rootfs /
 
 RUN useradd -ms /bin/bash daiquiri
-RUN chmod a+x /drun.sh
+RUN chown -R daiquiri.daiquiri /home/daiquiri
 USER daiquiri
 
 CMD ["/drun.sh"]

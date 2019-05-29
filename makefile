@@ -32,7 +32,7 @@ preparations:
 	mkdir -p ${CURDIR}/vol/log
 	mkdir -p ${CURDIR}/vol/postgres-app
 	mkdir -p ${CURDIR}/vol/postgres-data
-	mkdir -p ${CURDIR}/vol/daiquiri-app
+	mkdir -p ${CURDIR}/vol/daiquiri-app/app
 	mkdir -p ${CURDIR}/vol/download
 	mkdir -p ${CURDIR}/vol/ve
 
@@ -47,17 +47,17 @@ preparations:
 		> ${DC_TEMP}
 
 	cat ${TMP_LOCAL_MASTER} \
-			| sed 's|<POSTGRES_APP_DB>|"${POSTGRES_APP_DB}"|g' \
-			| sed 's|<POSTGRES_APP_USER>|"${POSTGRES_APP_USER}"|g' \
-			| sed 's|<POSTGRES_APP_PASSWORD>|"${POSTGRES_APP_PASSWORD}"|g' \
-			| sed 's|<POSTGRES_APP_HOST>|"${POSTGRES_APP_HOST}"|g' \
-			| sed 's|<POSTGRES_APP_PORT>|"${POSTGRES_APP_PORT}"|g' \
-			| sed 's|<POSTGRES_DATA_DB>|"${POSTGRES_DATA_DB}"|g' \
-			| sed 's|<POSTGRES_DATA_USER>|"${POSTGRES_DATA_USER}"|g' \
-			| sed 's|<POSTGRES_DATA_PASSWORD>|"${POSTGRES_DATA_PASSWORD}"|g' \
-			| sed 's|<POSTGRES_DATA_HOST>|"${POSTGRES_DATA_HOST}"|g' \
-			| sed 's|<POSTGRES_DATA_PORT>|"${POSTGRES_DATA_PORT}"|g' \
-			> ${TMP_LOCAL}
+		| sed 's|<POSTGRES_APP_DB>|"${POSTGRES_APP_DB}"|g' \
+		| sed 's|<POSTGRES_APP_USER>|"${POSTGRES_APP_USER}"|g' \
+		| sed 's|<POSTGRES_APP_PASSWORD>|"${POSTGRES_APP_PASSWORD}"|g' \
+		| sed 's|<POSTGRES_APP_HOST>|"${POSTGRES_APP_HOST}"|g' \
+		| sed 's|<POSTGRES_APP_PORT>|"${POSTGRES_APP_PORT}"|g' \
+		| sed 's|<POSTGRES_DATA_DB>|"${POSTGRES_DATA_DB}"|g' \
+		| sed 's|<POSTGRES_DATA_USER>|"${POSTGRES_DATA_USER}"|g' \
+		| sed 's|<POSTGRES_DATA_PASSWORD>|"${POSTGRES_DATA_PASSWORD}"|g' \
+		| sed 's|<POSTGRES_DATA_HOST>|"${POSTGRES_DATA_HOST}"|g' \
+		| sed 's|<POSTGRES_DATA_PORT>|"${POSTGRES_DATA_PORT}"|g' \
+		> ${TMP_LOCAL}
 
 run_build:
 	sudo docker-compose up --build -d

@@ -29,7 +29,7 @@ volumes:
         name: <GLOBAL_PREFIX>daiquiriapp
         driver_opts:
             type: none
-            device: <CURDIR>/vol/daiquiri-app
+            device: <CURDIR>/vol/daiquiri-app/app
             o: bind
     ve:
         name: <GLOBAL_PREFIX>ve
@@ -76,6 +76,8 @@ services:
         build:
             context: ./daiquiri
         container_name: <GLOBAL_PREFIX>daiquiri
+        ports:
+            - "7777:8000"
         depends_on:
             - postgresapp
             - postgresdata
