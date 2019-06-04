@@ -18,7 +18,7 @@ DEBUG = True
 '''
 Use Celery to run tasks asyncronous
 '''
-ASYNC = True
+ASYNC = False
 
 '''
 Use a CDN for the vendor css and js files

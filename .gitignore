@@ -2,3 +2,5 @@ vol/
 docker-compose.yaml
 *.local
 daiquiri/rootfs/tmp/template_local.py
+notes.md
+daiquiri-centos/

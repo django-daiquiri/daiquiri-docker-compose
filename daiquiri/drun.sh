@@ -1,7 +1,5 @@
 #!/bin/bash
 
-/opt/install-daiquiri.sh
+/opt/install-daiquiri.sh 
 
-while true; do
-    sleep 3600
-done
+CMD ["gunicorn"  , "-b", "0.0.0.0:8000", "app:app"]

@@ -38,7 +38,15 @@ During build four folders later used as volumes will be created under `vol/`. Th
     # connect to the docker
     docker exec -ti daiquiri bash
     ```
-
+1. Create a superuser for the Daiquiri instance
+    
+    ```shell
+    # connect to the docker
+    docker exec -ti daiquiri bash
+    cd app
+    .manage.py createsuperuser
+    ```
+    Follow the steps to create a superuser.
 
 ## Multiple Daiquiri instances on a single docker host
 You can have multiple running Daiquiri instances on a single docker host as long as you pay attention to three things.

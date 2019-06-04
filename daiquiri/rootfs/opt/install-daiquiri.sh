@@ -27,6 +27,7 @@ if [[ $(pip freeze | grep -Poc "^daiquiri==") == "0" ]]; then
     mkdir -p ${DAIQUIRI_APP}/app/vendor
     python manage.py download_vendor_files
     python manage.py collectstatic --no-input
+    # python manage.py createsuperuser
 
     # build queryparser from dev directory
     # git clone ${QUERYPARSER_REPO} /vol/daiquiri-app/src/queryparser
