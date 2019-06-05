@@ -70,7 +70,7 @@ run_build:
 
 run_remove:
 	sudo docker-compose down --rmi all 
-	# sudo docker-compose down -v
+	sudo docker-compose down -v
 	sudo docker-compose rm --force
 
 tail_logs:
