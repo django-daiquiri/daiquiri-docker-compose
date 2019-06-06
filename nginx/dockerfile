@@ -1,0 +1,21 @@
+FROM centos:latest
+
+RUN yum update -y && yum install -y \
+   yum-utils \
+   epel-release 
+
+RUN yum makecache
+
+RUN yum install -y \
+   nginx \
+   curl 
+
+    
+COPY vhosts.conf /etc/nginx/conf.d/vhost.conf 
+
+RUN useradd -ms /bin/bash daiquiri
+
+HEALTHCHECK --timeout=10s --interval=20s --retries=3 \
+   CMD curl -f http://localhost:80 || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]

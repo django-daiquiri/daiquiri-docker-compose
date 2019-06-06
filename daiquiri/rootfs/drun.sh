@@ -3,5 +3,7 @@
 /opt/install-daiquiri.sh
 
 while true; do
-    sleep 3600
+   gunicorn --bind unix:/vol/daiquiri.sock config.wsgi:application -D
+   nginx -g "daemon off;"
+   sleep 10
 done

@@ -1,6 +1,6 @@
 FROM centos:latest
 
-ENV PATH=/opt:${PATH} 
+ENV PATH=/vol/ve/bin:/opt:${PATH} 
 
 RUN yum update -y && yum install -y \
     yum-utils \
@@ -18,15 +18,21 @@ RUN pip3 install --upgrade virtualenv
 
 RUN yum install -y\
     build-essential \
+    gcc \
     curl \
     git \
     make \
     vim \
     libpq-dev \
-    postgresql \
-    postgresql-client \
-    python-psycopg2
+    glibc-devel \
+    postgresql-libs \
+    postgresql-devel \
+    python36-psycopg2 \
+    nginx
+    
+RUN pip3 install gunicorn
 
+COPY vhosts.conf /etc/nginx/conf.d/vhost.conf 
 
 COPY ./rootfs /
 

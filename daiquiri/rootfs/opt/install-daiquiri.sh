@@ -13,11 +13,14 @@ if [[ $(pip3 freeze | grep -Poc "^daiquiri==") == "0" ]]; then
     mkdir -p ${DAIQUIRI_APP}/app/config
     cp -f /tmp/wsgi.py ${DAIQUIRI_APP}/app/wsgi.py
 
+
     pip3 install --upgrade pip
     pip3 install --upgrade wheel
     pip3 install --upgrade setuptools
     pip3 install psycopg2-binary
     pip3 install astropy
+
+    pip3 install gunicorn
     
     # pip installs
     cd ${DAIQUIRI_APP}/app
