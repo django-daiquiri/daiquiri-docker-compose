@@ -2,7 +2,8 @@
 
 source /opt/ve.sh
 
-if [[ $(pip freeze | grep -Poc "^daiquiri==") == "0" ]]; then
+
+if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
 
     # Get repos
     echo "***GIT CLONE***"
@@ -12,22 +13,24 @@ if [[ $(pip freeze | grep -Poc "^daiquiri==") == "0" ]]; then
     mkdir -p ${DAIQUIRI_APP}/app/config
     cp -f /tmp/wsgi.py ${DAIQUIRI_APP}/app/wsgi.py
 
-    pip install --upgrade pip
-    pip install --upgrade wheel
-    pip install --upgrade setuptools
-    pip install psycopg2
-    pip install astropy
+
+    pip3 install --upgrade pip
+    pip3 install --upgrade wheel
+    pip3 install --upgrade setuptools
+    pip3 install psycopg2-binary
+    pip3 install astropy
+
+    pip3 install gunicorn
 
     # pip installs
     cd ${DAIQUIRI_APP}/app
     pip3 install -e ${DAIQUIRI_APP}/daiquiri
     cp -f /tmp/template_local.py ${DAIQUIRI_APP}/app/config/settings/local.py
-    python ./manage.py makemigrations
-    python manage.py migrate
+    python3 ./manage.py makemigrations
+    python3 manage.py migrate
     mkdir -p ${DAIQUIRI_APP}/app/vendor
-    python manage.py download_vendor_files
-    python manage.py collectstatic --no-input
-    # python manage.py createsuperuser
+    python3 manage.py download_vendor_files
+    python3 manage.py collectstatic --no-input
 
     # build queryparser from dev directory
     # git clone ${QUERYPARSER_REPO} /vol/daiquiri-app/src/queryparser
