@@ -32,12 +32,10 @@ RUN yum install -y\
     
 RUN pip3 install gunicorn
 
-COPY vhosts.conf /etc/nginx/conf.d/vhost.conf 
-
 COPY ./rootfs /
 
 RUN useradd -ms /bin/bash daiquiri
 RUN chown -R daiquiri.daiquiri /home/daiquiri
-USER daiquiri
+# USER daiquiri
 
 CMD ["/drun.sh"]

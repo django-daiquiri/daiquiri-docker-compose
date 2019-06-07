@@ -3,7 +3,7 @@
 source /opt/ve.sh
 
 
-if [[ $(pip3 freeze | grep -Poc "^daiquiri==") == "0" ]]; then
+if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
 
     # Get repos
     echo "***GIT CLONE***"
@@ -21,7 +21,7 @@ if [[ $(pip3 freeze | grep -Poc "^daiquiri==") == "0" ]]; then
     pip3 install astropy
 
     pip3 install gunicorn
-    
+
     # pip installs
     cd ${DAIQUIRI_APP}/app
     pip3 install -e ${DAIQUIRI_APP}/daiquiri
