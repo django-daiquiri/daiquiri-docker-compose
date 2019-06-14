@@ -38,6 +38,9 @@ preparations:
 	mkdir -p ${CURDIR}/vol/download
 	mkdir -p ${CURDIR}/vol/ve
 
+	chmod 777 ${CURDIR}/vol/log
+
+
 	cat ${DC_MASTER} \
 		| sed 's|<HOME>|${HOME}|g' \
 		| sed 's|<CURDIR>|${CURDIR}|g' \

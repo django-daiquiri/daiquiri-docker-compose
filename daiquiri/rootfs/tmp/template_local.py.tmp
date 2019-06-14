@@ -66,6 +66,8 @@ Use a custom registration workflow
 '''
 # AUTH_SIGNUP = True
 
+# switch off email verification
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 '''
 E-Mail configuration, see also:
 http://rdmo.readthedocs.io/en/latest/configuration/email.html
