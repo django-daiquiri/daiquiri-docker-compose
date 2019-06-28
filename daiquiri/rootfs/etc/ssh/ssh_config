@@ -1,0 +1,4 @@
+Host wordpress.vm
+    User <WORDPRESS_USER>
+    ForwardAgent yes
+    ProxyCommand ssh <WORDPRESS_USER>@<GLOBAL_PREFIX>-wordpress nc %h 22

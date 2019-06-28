@@ -3,4 +3,4 @@ if [[ ! -f "${VE}/bin/activate" ]]; then
     virtualenv -p python3 ve
 fi
 source ${VE}/bin/activate
-cd ${DAIQUIRI_APP}
+cd ${VOL}/daiquiri/${DAIQUIRI_APP}

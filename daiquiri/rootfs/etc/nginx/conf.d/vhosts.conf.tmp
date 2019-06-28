@@ -7,6 +7,6 @@ server {
         proxy_pass http://unix:/var/run/daiquiri.sock;
     }
     location /static/ {
-        alias /vol/daiquiri/astro-ndfi-app/static_root/;
+        alias /vol/daiquiri/<DAIQUIRI_APP>/static_root/;
     }
 }

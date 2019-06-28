@@ -1,0 +1,19 @@
+FROM centos:latest
+
+RUN yum update -y && yum install -y \
+   yum-utils \
+   epel-release
+
+RUN yum makecache
+
+RUN yum install -y \
+    mariadb-server \
+    mariadb-client \
+    mariadb-shared
+
+COPY ./rootfs /
+
+RUN mkdir /var/run/mysqld \
+     && chown -R mysql:mysql /var/run/mysqld
+
+CMD ["/drun.sh"]

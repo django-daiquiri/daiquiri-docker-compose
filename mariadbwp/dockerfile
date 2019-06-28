@@ -1,0 +1,6 @@
+FROM mariadb:latest
+
+RUN apt update -y && apt install \
+    mariadb-client
+
+CMD ["mysqld"]

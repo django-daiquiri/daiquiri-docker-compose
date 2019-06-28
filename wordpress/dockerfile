@@ -1,0 +1,40 @@
+FROM centos:latest
+
+RUN yum update -y && yum install -y \
+   yum-utils \
+   epel-release 
+
+RUN yum makecache
+
+RUN yum install -y \
+   wget \
+   nginx\
+   curl \
+   git \ 
+   mysql 
+
+RUN mkdir -p /etc/nginx/conf.d
+COPY ./rootfs /
+
+RUN useradd -ms /bin/bash wordpress
+
+# install PHP7.3
+RUN wget http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
+      rpm -Uvh remi-release-7.rpm && \
+      yum-config-manager --enable remi-php73 && \
+      yum update -y && \
+      yum install -y php-fpm
+
+COPY ./conf/wp-config-sample.php /vol/wp/wordpress/wp-config.php 
+
+# install wordpress latest
+RUN mkdir -p /vol/wp/ && \
+      wget https://wordpress.org/latest.tar.gz && \
+      tar xzvf latest.tar.gz -C /vol/wp/wordpress && \
+      rm latest.tar.gz
+
+HEALTHCHECK --timeout=10s --interval=20s --retries=3 \
+   CMD curl -f http://localhost:80 || exit 1
+
+
+CMD ["/drun.sh"]

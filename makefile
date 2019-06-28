@@ -7,10 +7,12 @@ FINALLY_EXPOSED_PORT=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=FINALLY_E
 GLOBAL_PREFIX=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=GLOBAL_PREFIX=).*")
 LOGGING_DIR=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=LOGGING_DIR=).*")
 DOWNLOAD_DIR=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DOWNLOAD_DIR=).*")
+DAIQUIRI_APP=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DAIQUIRI_APP=).*")
 
 TMP_LOCAL_MASTER = "daiquiri/rootfs/tmp/template_local.py.tmp"
 TMP_LOCAL = "daiquiri/rootfs/tmp/template_local.py"
 
+# Postgres data and app
 VARS_DB_APP=$(shell if [ -f settings/postgresapp.local ]; then echo settings/postgresapp.local; else echo settings/postgresapp.env; fi)
 POSTGRES_APP_DB=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_DB=).*")
 POSTGRES_APP_USER=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_USER=).*")
@@ -24,6 +26,8 @@ POSTGRES_DATA_PASSWORD=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POST
 POSTGRES_DATA_HOST=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_HOST=).*")
 POSTGRES_DATA_PORT=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_PORT=)[0-9]+")
 
+# WP
+VARS_DB_WP=$(shell if [ -f settings/wp.local ]; then echo settings/wp.local; else echo settings/wp.env; fi)
 
 all: preparations run_build tail_logs
 build: preparations run_build
@@ -34,9 +38,11 @@ preparations:
 	mkdir -p ${CURDIR}/vol/log
 	mkdir -p ${CURDIR}/vol/postgres-app
 	mkdir -p ${CURDIR}/vol/postgres-data
-	mkdir -p ${CURDIR}/vol/daiquiri-app
+	mkdir -p ${CURDIR}/vol/daiquiri
 	mkdir -p ${CURDIR}/vol/download
 	mkdir -p ${CURDIR}/vol/ve
+	mkdir -p ${CURDIR}/vol/wp
+	mkdir -p ${CURDIR}/vol/wpdb
 
 	chmod 777 ${CURDIR}/vol/log
 
@@ -49,6 +55,7 @@ preparations:
 		| sed 's|<VARIABLES_FILE>|${VARS_ENV}|g' \
 		| sed 's|<VARIABLES_DB_APP>|${VARS_DB_APP}|g' \
 		| sed 's|<VARIABLES_DB_DATA>|${VARS_DB_DATA}|g' \
+		| sed 's|<VARIABLES_DB_WP>|${VARS_DB_WP}|g' \
 		| sed 's|<DOWNLOAD_DIR>|${DOWNLOAD_DIR}|g' \
 		| sed 's|<LOGGING_DIR>|${LOGGING_DIR}|g' \
 		> ${DC_TEMP}
@@ -67,6 +74,11 @@ preparations:
 		| sed 's|<DOWNLOAD_DIR>|"${DOWNLOAD_DIR}"|g' \
 		| sed 's|<LOGGING_DIR>|"${LOGGING_DIR}"|g' \
 		> ${TMP_LOCAL}
+
+
+	cat ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf.tmp \
+	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
+	> ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf
 
 run_build:
 	sudo docker-compose up --build -d

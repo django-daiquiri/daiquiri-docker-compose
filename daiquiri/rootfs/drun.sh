@@ -3,7 +3,7 @@
 /opt/install-daiquiri.sh
 
 while true; do
-    cd /vol/daiquiri-app/app
+    cd /vol/daiquiri/${DAIQUIRI_APP}
     gunicorn --bind unix:/var/run/daiquiri.sock config.wsgi:application -D
     
     nginx -g "daemon off;"

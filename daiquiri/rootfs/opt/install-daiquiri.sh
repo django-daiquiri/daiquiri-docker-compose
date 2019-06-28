@@ -2,15 +2,14 @@
 
 source /opt/ve.sh
 
+# clone app 
+echo "***GIT CLONE APP***"
+git clone ${DAIQUIRI_APP_REPO} ${VOL}/daiquiri/${DAIQUIRI_APP}
 
 if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
 
     # Get repos
-    echo "***GIT CLONE***"
-    git clone -b dev ${DAIQUIRI_APP_REPO} ${DAIQUIRI_APP}/app
-    git clone -b dev ${DAIQUIRI_REPO} ${DAIQUIRI_APP}/daiquiri
-
-
+    git clone -b dev ${DAIQUIRI_REPO} ${VOL}/daiquiri/source
 
     pip3 install --upgrade pip
     pip3 install --upgrade wheel
@@ -19,18 +18,18 @@ if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
     pip3 install astropy
 
     pip3 install gunicorn
-    mkdir -p ${DAIQUIRI_APP}/app/config
-    cp -f /tmp/wsgi.py ${DAIQUIRI_APP}/app/wsgi.py
+    mkdir -p ${VOL}/daiquiri/${DAIQUIRI_APP}/config
+    cp -f /tmp/wsgi.py ${VOL}/daiquiri/${DAIQUIRI_APP}/wsgi.py
 
     # pip installs
-    cd ${DAIQUIRI_APP}/app
-    pip3 install -e ${DAIQUIRI_APP}/daiquiri
-    cp -f /tmp/template_local.py ${DAIQUIRI_APP}/app/config/settings/local.py
+    cd ${VOL}/daiquiri/${DAIQUIRI_APP}
+    pip3 install -e ${VOL}/daiquiri/source
+    cp -f /tmp/template_local.py ${VOL}/daiquiri/${DAIQUIRI_APP}/config/settings/local.py
     python3 ./manage.py makemigrations
     python3 manage.py migrate
-    mkdir -p ${DAIQUIRI_APP}/app/vendor
+    mkdir -p ${VOL}/daiquiri/${DAIQUIRI_APP}/vendor
     python3 manage.py download_vendor_files
-    python3 manage.py collectstatic --no-input
+    python3 manage.py collectstatic 
 
   else
       echo "Won't do anything because Daiquiri is already installed."
