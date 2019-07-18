@@ -119,7 +119,7 @@ services:
             context: ./wordpress
         container_name: <GLOBAL_PREFIX>wp
         ports:
-            - "8000:8000"
+            - "9000:9000"
         restart: always
         links: 
             - mariadbwp

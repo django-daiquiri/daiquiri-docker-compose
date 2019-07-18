@@ -80,12 +80,16 @@ $table_prefix  = 'wp_';
 define('WP_DEBUG', false);
 
 $_SERVER['HTTPS'] = 'on';
-$_SERVER['HTTP_HOST'] = 'www.astro-nfdi.org';
-$_SERVER['SERVER_NAME'] = 'www.astro-nfdi.org';
+# $_SERVER['HTTP_HOST'] = 'www.astro-nfdi.org';
+# $_SERVER['SERVER_NAME'] = 'www.astro-nfdi.org';
 
-# define('DAIQUIRI_DEBUG', True);
+$_SERVER['HTTP_HOST'] = 'localhost;
+$_SERVER['SERVER_NAME'] = 'localhost';
 
-# define('DAIQUIRI_URL', 'https://');
+define('DAIQUIRI_DEBUG', True);
+# define('DAIQUIRI_URL', 'https://www.astro-nfdi.org');
+define('DAIQUIRI_URL', 'localhost:9494');
+
 
 define('COOKIEPATH','');
 define('SITECOOKIEPATH',COOKIEPATH);

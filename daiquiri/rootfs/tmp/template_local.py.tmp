@@ -98,3 +98,8 @@ QUERY_DOWNLOAD_DIR = <DOWNLOAD_DIR>
 
 
 # WORDPRESS_PATH = ''
+WORDPRESS_URL = '/cms/'
+WORDPRESS_PATH = None
+WORDPRESS_SSH = '<GLOBAL_PREFIX>-wp.vm:/vol/wp/wordpress'
+
+
