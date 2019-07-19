@@ -27,7 +27,7 @@ POSTGRES_DATA_HOST=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES
 POSTGRES_DATA_PORT=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_PORT=)[0-9]+")
 
 # WP
-VARS_DB_WP=$(shell if [ -f settings/wp.local ]; then echo settings/wp.local; else echo settings/wp.env; fi)
+VARS_WP=$(shell if [ -f settings/wp.local ]; then echo settings/wp.local; else echo settings/wp.env; fi)
 
 all: preparations run_build tail_logs
 build: preparations run_build
@@ -55,7 +55,7 @@ preparations:
 		| sed 's|<VARIABLES_FILE>|${VARS_ENV}|g' \
 		| sed 's|<VARIABLES_DB_APP>|${VARS_DB_APP}|g' \
 		| sed 's|<VARIABLES_DB_DATA>|${VARS_DB_DATA}|g' \
-		| sed 's|<VARIABLES_DB_WP>|${VARS_DB_WP}|g' \
+		| sed 's|<VARIABLES_WP>|${VARS_WP}|g' \
 		| sed 's|<DOWNLOAD_DIR>|${DOWNLOAD_DIR}|g' \
 		| sed 's|<LOGGING_DIR>|${LOGGING_DIR}|g' \
 		> ${DC_TEMP}

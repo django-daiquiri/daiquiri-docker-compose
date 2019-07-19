@@ -2,16 +2,17 @@
 
 
 cp /tmp/wp-config-sample.php /vol/wp/wordpress/wp-config.php
+# cp /tmp/index.php /vol/wp/index.php
 
 
 sed -i 's/.*cgi.fix_pathinfo=1.*/cgi.fix_pathinfo=0/' /etc/php.ini
 
 # get plugin and theme
 cd /vol/wp/wordpress/wp-content/plugins/ && \
-      git clone https://github.com/django-daiquiri/wordpress-plugin daiquiri
+     git clone https://github.com/django-daiquiri/wordpress-plugin daiquiri
 
 cd /vol/wp/wordpress/wp-content/themes && \
-      git clone https://github.com/django-daiquiri/wordpress-theme daiquiri
+     git clone https://github.com/django-daiquiri/wordpress-theme daiquiri
 
 
 # Adjust user:

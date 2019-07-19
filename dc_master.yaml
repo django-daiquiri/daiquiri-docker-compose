@@ -60,7 +60,6 @@ services:
             - "<FINALLY_EXPOSED_PORT>:80"
         links:
             - daiquiri
-            - wordpress
         volumes:
             - log:/vol/log
             - daiquiri:/vol/daiquiri
@@ -104,28 +103,27 @@ services:
         env_file:
             - <VARIABLES_FILE>
 
-    mariadbwp:
-        build:
-            context: ./mariadbwp
-        container_name: <GLOBAL_PREFIX>mariadbwp
+    wpdb:
+        image: mysql:5.7
+        container_name: <GLOBAL_PREFIX>wpdb
         volumes:
             - log:<LOGGING_DIR>
             - wpdb:/var/lib/mysql
         env_file:
-            - <VARIABLES_DB_WP>
+            - <VARIABLES_WP>
 
-    wordpress:
-        build:
-            context: ./wordpress
+    wp:
+        image: wordpress
         container_name: <GLOBAL_PREFIX>wp
         ports:
-            - "9000:9000"
+            - "8080:80"
         restart: always
-        links: 
-            - mariadbwp
+        links:
+            - wpdb
         volumes:
             - log:<LOGGING_DIR>
             - wp:/vol/wp
         env_file:
-            - <VARIABLES_DB_WP>
+            - <VARIABLES_WP>
+    
         
