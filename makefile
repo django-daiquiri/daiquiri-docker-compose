@@ -28,6 +28,10 @@ POSTGRES_DATA_PORT=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES
 
 # WP
 VARS_WP=$(shell if [ -f settings/wp.local ]; then echo settings/wp.local; else echo settings/wp.env; fi)
+WORDPRESS_DB_USER=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_USER=).*")
+WORDPRESS_DB_NAME=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_NAME=).*")
+WORDPRESS_DB_PASSWORD=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_PASSWORD=).*")
+WORDPRESS_DB_HOST=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_HOST=).*")
 
 all: preparations run_build tail_logs
 build: preparations run_build

@@ -113,7 +113,8 @@ services:
             - <VARIABLES_WP>
 
     wp:
-        image: wordpress
+        build: 
+            context: ./wordpress 
         container_name: <GLOBAL_PREFIX>wp
         ports:
             - "8080:80"
@@ -122,8 +123,7 @@ services:
             - wpdb
         volumes:
             - log:<LOGGING_DIR>
-            - wp:/vol/wp
+            - wp:/var/www/html
         env_file:
-            - <VARIABLES_WP>
-    
+           - <VARIABLES_WP>
         
