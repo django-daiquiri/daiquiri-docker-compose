@@ -64,7 +64,6 @@ services:
             - log:/vol/log
             - daiquiri:/vol/daiquiri
             - ve:/vol/ve
-            - wp:/vol/wp
         restart: always
         env_file:
             - <VARIABLES_FILE>

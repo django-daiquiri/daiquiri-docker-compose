@@ -32,6 +32,7 @@ WORDPRESS_DB_USER=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_
 WORDPRESS_DB_NAME=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_NAME=).*")
 WORDPRESS_DB_PASSWORD=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_PASSWORD=).*")
 WORDPRESS_DB_HOST=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_HOST=).*")
+DAIQUIRI_URL=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=DAIQUIRI_URL=).*")
 
 all: preparations run_build tail_logs
 build: preparations run_build
@@ -50,7 +51,7 @@ preparations:
 
 	chmod 777 ${CURDIR}/vol/log
 
-
+	# rewrite docker-compose.yaml
 	cat ${DC_MASTER} \
 		| sed 's|<HOME>|${HOME}|g' \
 		| sed 's|<CURDIR>|${CURDIR}|g' \
@@ -64,6 +65,7 @@ preparations:
 		| sed 's|<LOGGING_DIR>|${LOGGING_DIR}|g' \
 		> ${DC_TEMP}
 
+	# rewrite settings in local.py for Daiquiri
 	cat ${TMP_LOCAL_MASTER} \
 		| sed 's|<GLOBAL_PREFIX>|"${GLOBAL_PREFIX}"|g' \
 		| sed 's|<POSTGRES_APP_DB>|"${POSTGRES_APP_DB}"|g' \
@@ -80,11 +82,21 @@ preparations:
 		| sed 's|<LOGGING_DIR>|"${LOGGING_DIR}"|g' \
 		> ${TMP_LOCAL}
 
-
+	# Daiquiri nginx conf 
 	cat ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf.tmp \
 	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 	> ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf
 
+	# Wordpress
+	cat ${CURDIR}/wordpress/rootfs/tmp/wp-config-sample.tmp.php \
+		| sed 's|<DAIQUIRI_URL>|"${DAIQUIRI_URL}"|g' \
+		| sed 's|<GLOBAL_PREFIX>|"${GLOBAL_PREFIX}"|g' \
+		| sed 's|<WORDPRESS_DB_NAME>|"${WORDPRESS_DB_NAME}"|g' \
+		| sed 's|<WORDPRESS_DB_USER>|"${WORDPRESS_DB_USER}"|g' \
+		| sed 's|<WORDPRESS_DB_HOST>|"${WORDPRESS_DB_HOST}"|g' \
+		| sed 's|<WORDPRESS_DB_PASSWORD>|"${WORDPRESS_DB_PASSWORD}"|g' \
+		> ${CURDIR}/wordpress/rootfs/tmp/wp-config-sample.php
+	
 run_build:
 	sudo docker-compose up --build -d
 

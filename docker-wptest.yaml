@@ -1,0 +1,48 @@
+version: "3.7"
+
+volumes:
+    log: 
+      name: dq-log
+      driver_opts:
+          type: none
+          device: /home/galkin/code/django-daiquiri/docker-compose/vol/log
+          o: bind
+    wptest:
+      name: wptest
+      driver_opts:
+          type: none
+          device: /home/galkin/code/django-daiquiri/docker-compose/vol/wptest
+          o: bind
+
+    wpdbtest:
+      name: wpdbtest
+      driver_opts:
+          type: none
+          device: /home/galkin/code/django-daiquiri/docker-compose/vol/wpdbtest
+          o: bind
+
+services:    
+    wpdb:
+        image: mysql:5.7
+        container_name: test-wpdb
+        volumes:
+            - log:/vol/log
+            - wpdbtest:/var/lib/mysql
+        env_file:
+            - settings/wp.env
+
+    wp:
+        build:
+          context: ./wordpress
+        container_name: test-wp
+        ports:
+            - "8080:80"
+        restart: always
+        links:
+            - wpdb
+        volumes:
+            - log:/var/log
+            - wptest:/var/www/html
+        env_file:
+            - settings/wp.env
+    
