@@ -60,6 +60,7 @@ services:
             - "<FINALLY_EXPOSED_PORT>:80"
         links:
             - daiquiri
+            - wp
         volumes:
             - log:/vol/log
             - daiquiri:/vol/daiquiri

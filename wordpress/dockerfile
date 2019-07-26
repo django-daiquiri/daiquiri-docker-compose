@@ -5,7 +5,9 @@ RUN apt-get update && \
 
 COPY ./rootfs /
 
-RUN a2enmod remoteip
+RUN a2enmod remoteip && \
+       a2dissite 000-default && \ 
+       a2ensite vhost
        
 CMD ["/drun.sh"]
 
