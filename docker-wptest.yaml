@@ -29,7 +29,7 @@ services:
             - log:/vol/log
             - wpdbtest:/var/lib/mysql
         env_file:
-            - settings/wp.env
+            - settings/wp-test.env
 
     wp:
         build:
@@ -44,5 +44,5 @@ services:
             - log:/var/log
             - wptest:/var/www/html
         env_file:
-            - settings/wp.env
+            - settings/wp-test.env
     

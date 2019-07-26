@@ -87,7 +87,15 @@ preparations:
 	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 	> ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf
 
+
+
 	# Wordpress
+	# apache2
+	cat ${CURDIR}/wordpress/rootfs/tmp/vhost.conf \
+	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+	> ${CURDIR}/wordpress/rootfs/etc/apache2/sites-available/vhost.conf
+
+	# wp-config.php
 	cat ${CURDIR}/wordpress/rootfs/tmp/wp-config-sample.tmp.php \
 		| sed 's|<DAIQUIRI_URL>|"${DAIQUIRI_URL}"|g' \
 		| sed 's|<GLOBAL_PREFIX>|"${GLOBAL_PREFIX}"|g' \

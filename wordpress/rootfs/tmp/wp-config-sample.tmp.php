@@ -90,7 +90,7 @@ define('DAIQUIRI_DEBUG', True);
 define('DAIQUIRI_URL', <DAIQUIRI_URL>);
 
 
-define('COOKIEPATH','cms');
+define('COOKIEPATH','/cms');
 define('SITECOOKIEPATH',COOKIEPATH);
 define('ADMIN_COOKIE_PATH',COOKIEPATH);
 define('PLUGINS_COOKIE_PATH',COOKIEPATH);

@@ -99,6 +99,7 @@ services:
             - download:<DOWNLOAD_DIR>
             - daiquiri:/vol/daiquiri
             - ve:/vol/ve
+            - wp:/var/www/html
         env_file:
             - <VARIABLES_FILE>
 

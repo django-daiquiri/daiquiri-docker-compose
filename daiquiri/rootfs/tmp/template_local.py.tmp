@@ -97,9 +97,8 @@ LOGGING_DIR = <LOGGING_DIR>
 QUERY_DOWNLOAD_DIR = <DOWNLOAD_DIR>
 
 
-# WORDPRESS_PATH = ''
+# WORDPRESS_PATH = '' or WORDPRESS_SSH
 WORDPRESS_URL = '/cms/'
-WORDPRESS_PATH = None
-WORDPRESS_SSH = 'dq-wp.vm:/www/html/wordpress'
+WORDPRESS_PATH = '/var/www/html/
 
 
