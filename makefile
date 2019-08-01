@@ -5,7 +5,6 @@ DC_TEMP="docker-compose.yaml"
 VARS_ENV=$(shell if [ -f settings/app.local ]; then echo settings/app.local; else echo settings/app.env; fi)
 FINALLY_EXPOSED_PORT=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=FINALLY_EXPOSED_PORT=)[0-9]+")
 GLOBAL_PREFIX=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=GLOBAL_PREFIX=).*")
-LOGGING_DIR=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=LOGGING_DIR=).*")
 DOWNLOAD_DIR=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DOWNLOAD_DIR=).*")
 DAIQUIRI_APP=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DAIQUIRI_APP=).*")
 
@@ -40,7 +39,6 @@ fromscratch: preparations run_remove run_build
 remove: run_remove
 
 preparations:
-	mkdir -p ${CURDIR}/vol/log
 	mkdir -p ${CURDIR}/vol/postgres-app
 	mkdir -p ${CURDIR}/vol/postgres-data
 	mkdir -p ${CURDIR}/vol/daiquiri
@@ -49,7 +47,9 @@ preparations:
 	mkdir -p ${CURDIR}/vol/wp
 	mkdir -p ${CURDIR}/vol/wpdb
 
-	chmod 777 ${CURDIR}/vol/log
+	# create log directories
+	mkdir -p ${CURDIR}/vol/log
+	# chmod 777 -R ${CURDIR}/vol/log
 
 	# rewrite docker-compose.yaml
 	cat ${DC_MASTER} \
@@ -62,7 +62,6 @@ preparations:
 		| sed 's|<VARIABLES_DB_DATA>|${VARS_DB_DATA}|g' \
 		| sed 's|<VARIABLES_WP>|${VARS_WP}|g' \
 		| sed 's|<DOWNLOAD_DIR>|${DOWNLOAD_DIR}|g' \
-		| sed 's|<LOGGING_DIR>|${LOGGING_DIR}|g' \
 		> ${DC_TEMP}
 
 	# rewrite settings in local.py for Daiquiri
@@ -79,13 +78,18 @@ preparations:
 		| sed 's|<POSTGRES_DATA_HOST>|"${POSTGRES_DATA_HOST}"|g' \
 		| sed 's|<POSTGRES_DATA_PORT>|"${POSTGRES_DATA_PORT}"|g' \
 		| sed 's|<DOWNLOAD_DIR>|"${DOWNLOAD_DIR}"|g' \
-		| sed 's|<LOGGING_DIR>|"${LOGGING_DIR}"|g' \
 		> ${TMP_LOCAL}
 
 	# Daiquiri nginx conf 
 	cat ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf.tmp \
+	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 	> ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf
+
+	# Reverse proxy nginx conf 
+	cat ${CURDIR}/nginx/conf/vhost.conf.tmp \
+	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+	> ${CURDIR}/nginx/conf/vhost.conf
 
 
 
@@ -107,6 +111,9 @@ preparations:
 	
 run_build:
 	sudo docker-compose up --build -d
+
+run_volrm:
+	sudo docker volume ls | xargs sudo docker volume rm 
 
 run_remove:
 	sudo docker-compose down --rmi all 

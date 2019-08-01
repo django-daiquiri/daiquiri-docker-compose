@@ -23,6 +23,9 @@ git clone https://github.com/django-daiquiri/wordpress-theme ./wp-content/themes
 
 chown -R www-data:www-data /var/www/html
 
+useradd -u 1500 wordpress
+
+mkdir -p /vol/log/wp
 
 # should come from env file but doesn't
 # WORDPRESS_CONFIG_EXTRA=define('DAIQUIRI_URL', 'localhost:9494');
@@ -31,9 +34,6 @@ chown -R www-data:www-data /var/www/html
 # cp ./tmp.php /var/www/html/wp-config.php /var/www/html/wp-config.php
 
 # cat /var/www/wp-config.php | grep EXTRA
-
-chown -R www-data:www-data /var/www/html
-
 
 while true; do
     apachectl -D FOREGROUND

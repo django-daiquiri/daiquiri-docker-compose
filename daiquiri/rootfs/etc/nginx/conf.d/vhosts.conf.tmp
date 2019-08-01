@@ -9,4 +9,5 @@ server {
     location /static/ {
         alias /vol/daiquiri/<DAIQUIRI_APP>/static_root/;
     }
+
 }

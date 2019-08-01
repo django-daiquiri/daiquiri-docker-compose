@@ -7,7 +7,8 @@ COPY ./rootfs /
 
 RUN a2enmod remoteip && \
        a2dissite 000-default && \ 
-       a2ensite vhost
+       a2ensite vhost && \
+       a2enmod rewrite
        
 CMD ["/drun.sh"]
 
