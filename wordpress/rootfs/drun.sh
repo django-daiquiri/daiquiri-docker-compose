@@ -24,8 +24,6 @@ git clone https://github.com/django-daiquiri/wordpress-theme ./wp-content/themes
 
 chown -R www-data:www-data /var/www/html/wordpress
 
-useradd -u 1500 wordpress
-
 mkdir -p /vol/log/wp
 
 # should come from env file but doesn't
