@@ -99,6 +99,6 @@ QUERY_DOWNLOAD_DIR = <DOWNLOAD_DIR>
 
 # WORDPRESS_PATH = '' or WORDPRESS_SSH
 WORDPRESS_URL = '/cms/'
-WORDPRESS_PATH = '/var/www/html/
+WORDPRESS_PATH = '/var/www/html//wordpress/'
 
 

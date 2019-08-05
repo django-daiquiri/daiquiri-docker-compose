@@ -4,11 +4,11 @@ server {
     server_name localhost;
 
     location / {
-        proxy_pass http://dq-daiquiri:80;
+        proxy_pass http://<GLOBAL_PREFIX>daiquiri:80;
     }
     
     location /cms/ {
-        proxy_pass http://dq-wp:80;
+        proxy_pass http://<GLOBAL_PREFIX>wp:80;
         proxy_redirect      off;
         proxy_set_header    Host $host;
         proxy_set_header    X-Real-IP $remote_addr;

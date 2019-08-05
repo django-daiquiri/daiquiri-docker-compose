@@ -100,7 +100,7 @@ services:
             - download:<DOWNLOAD_DIR>
             - daiquiri:/vol/daiquiri
             - ve:/vol/ve
-            - wp:/var/www/html
+            - wp:/var/www/html/wordpress
         env_file:
             - <VARIABLES_FILE>
 
@@ -122,7 +122,7 @@ services:
         links:
             - wpdb
         volumes:
-            - wp:/var/www/html
+            - wp:/var/www/html/wordpress
             - log:/vol/log
         env_file:
            - <VARIABLES_WP>

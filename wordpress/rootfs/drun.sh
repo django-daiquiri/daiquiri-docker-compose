@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd /var/www/html
+mkdir -p /var/www/html/wordpress
+cd /var/www/html/wordpress
 
 if [ ! -e config.php ]; then
     
@@ -21,7 +22,7 @@ fi
 git clone https://github.com/django-daiquiri/wordpress-plugin ./wp-content/plugins/daiquiri
 git clone https://github.com/django-daiquiri/wordpress-theme ./wp-content/themes/daiquiri
 
-chown -R www-data:www-data /var/www/html
+chown -R www-data:www-data /var/www/html/wordpress
 
 useradd -u 1500 wordpress
 
