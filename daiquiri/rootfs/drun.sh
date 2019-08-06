@@ -1,8 +1,10 @@
 #!/bin/bash
 
-/opt/install-daiquiri.sh
-
+# create log directories
 mkdir -p /vol/log/nginx/
+mkdir -p /vol/log/daiquiri/
+
+/opt/install-daiquiri.sh
 
 while true; do
     cd /vol/daiquiri/${DAIQUIRI_APP}
