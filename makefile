@@ -121,4 +121,4 @@ run_remove:
 	docker-compose rm --force
 
 tail_logs:
-	sudo docker-compose logs -f
+	docker-compose logs -f
