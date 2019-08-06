@@ -21,12 +21,12 @@ During build four folders later used as volumes will be created under `vol/`. Th
 
 
 ## Configuration & Usage
-1. Declare your settings in `variables.local`
+1. Declare your settings in `*.local`
 
     Default settings are stored in the 
    `var/` folder. all `*.env` files are overwritten with each pull. To keep the local changes, copy `var/app.env` file to `var/app.local` and edit it. Same goes for the DB settings in `var/postgresapp.env` and `var/postgresdata.env`
 
-    The `makefile` will use the `variables.local` file if such a file exists. 
+    The `makefile` will use the `*.local` file if such a file exists. 
 
 1. Create a superuser for the Daiquiri instance
     
@@ -43,6 +43,19 @@ During build four folders later used as volumes will be created under `vol/`. Th
     # switch off email verification
     ACCOUNT_EMAIL_VERIFICATION = 'optional'
     ```
+1. Usefull commands
+```
+docker-compose -f ./docker-compose.yaml up --build -d
+docker-compose logs -f
+docker-compose -f ./docker-wptest.yaml down -v  
+```
+The -v option removes the volumes.
+
+```
+sudo docker container ps -aq | xargs sudo docker stop
+sudo docker container ps -aq | xargs sudo docker rm
+sudo docker volume ls | sudo xargs docker volume rm 
+```
 
 
 ## Multiple Daiquiri instances on a single docker host
