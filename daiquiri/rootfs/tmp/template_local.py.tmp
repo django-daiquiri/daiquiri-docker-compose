@@ -93,7 +93,7 @@ http://rdmo.readthedocs.io/en/latest/configuration/email.html
 
 SENDFILE_BACKEND = 'sendfile.backends.xsendfile'
 
-LOGGING_DIR = /vol/log/daiquiri
+LOGGING_DIR = "/vol/log/daiquiri"
 QUERY_DOWNLOAD_DIR = <DOWNLOAD_DIR>
 
 
