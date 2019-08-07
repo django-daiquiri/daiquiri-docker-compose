@@ -3,13 +3,17 @@ FROM wordpress
 RUN apt-get update && \ 
        apt-get install -y --no-install-recommends git vim
 
-COPY ./rootfs /
+RUN mkdir -p /etc/apache2/sites-available/
+COPY ./conf/vhost.conf /etc/apache2/sites-available/vhost.conf
+COPY ./conf/wp-config-sample.php /tmp/
+
+COPY ./drun.sh /
 
 # enable apache mods and set vhost conf
 RUN a2enmod remoteip rewrite proxy proxy_http && \
        a2dissite 000-default && \ 
        a2ensite vhost 
-       
+
 CMD ["/drun.sh"]
 
 

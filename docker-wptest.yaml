@@ -38,20 +38,20 @@ services:
         restart: always
         depends_on:
             - wpdb
-        ports:
-            - "8080:80"
         volumes:
             - log:/vol/log
             - wp:/var/www/html/wordpress
         env_file:
             - settings/wp.env
     
-    # nginx:
-    #     build:
-    #         context: ./nginx-simple
-    #     container_name: dq-nginx
-    #     links:
-    #         - wp
-    #     restart: always
-    #     ports:
-    #         - "8080:80"
+    nginx:
+        build:
+            context: ./nginx
+        container_name: dq-nginx
+        links:
+            - wp
+        restart: always
+        ports:
+            - "8080:80"
+        volumes:
+            - log:/vol/log

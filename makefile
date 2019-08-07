@@ -34,6 +34,7 @@ WORDPRESS_DB_HOST=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_
 DAIQUIRI_URL=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=DAIQUIRI_URL=).*")
 WORDPRESS_URL=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_URL=).*")
 HTTP_HOST=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=HTTP_HOST=).*")
+PROXY_PASS=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=PROXY_PASS=).*")
 
 all: preparations run_build tail_logs
 build: preparations run_build
@@ -85,27 +86,27 @@ preparations:
 		> ${TMP_LOCAL}
 
 	# Daiquiri nginx conf 
-	cat ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf.tmp \
+	cat ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.tmp.conf \
 	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 	> ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf
 
 	# Reverse proxy nginx conf 
-	cat ${CURDIR}/nginx/conf/vhost.conf.tmp \
+	cat ${CURDIR}/nginx/conf/vhost.tmp.conf \
 	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 	> ${CURDIR}/nginx/conf/vhost.conf
-
 
 
 	# Wordpress
 	# apache2
-	cat ${CURDIR}/wordpress/rootfs/tmp/vhost.conf \
+	cat ${CURDIR}/wordpress/conf/vhost.tmp.conf \
 	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-	| sed 's|<WORDPRESS_URL>|"${WORDPRESS_URL}"|g' \
-	> ${CURDIR}/wordpress/rootfs/etc/apache2/sites-available/vhost.conf
+	| sed 's|<PROXY_PASS>|${PROXY_PASS}|g' \
+	> ${CURDIR}/wordpress/conf/vhost.conf
 
 	# wp-config.php
-	cat ${CURDIR}/wordpress/rootfs/tmp/wp-config-sample.tmp.php \
+	cat ${CURDIR}/wordpress/conf/wp-config-sample.tmp.php \
 		| sed 's|<DAIQUIRI_URL>|"${DAIQUIRI_URL}"|g' \
 		| sed 's|<WORDPRESS_URL>|"${WORDPRESS_URL}"|g' \
 		| sed 's|<HTTP_HOST>|"${HTTP_HOST}"|g' \
@@ -114,7 +115,7 @@ preparations:
 		| sed 's|<WORDPRESS_DB_USER>|"${WORDPRESS_DB_USER}"|g' \
 		| sed 's|<WORDPRESS_DB_HOST>|"${WORDPRESS_DB_HOST}"|g' \
 		| sed 's|<WORDPRESS_DB_PASSWORD>|"${WORDPRESS_DB_PASSWORD}"|g' \
-		> ${CURDIR}/wordpress/rootfs/tmp/wp-config-sample.php
+		> ${CURDIR}/wordpress/conf/wp-config-sample.php
 	
 run_build:
 	docker-compose up --build -d
