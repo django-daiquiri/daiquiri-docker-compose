@@ -32,11 +32,15 @@ WORDPRESS_DB_NAME=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_
 WORDPRESS_DB_PASSWORD=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_PASSWORD=).*")
 WORDPRESS_DB_HOST=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_HOST=).*")
 DAIQUIRI_URL=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=DAIQUIRI_URL=).*")
+WORDPRESS_URL=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_URL=).*")
+HTTP_HOST=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=HTTP_HOST=).*")
 
 all: preparations run_build tail_logs
 build: preparations run_build
 fromscratch: preparations run_remove run_build
 remove: run_remove
+down: run_down
+logs: tail_logs
 
 preparations:
 	mkdir -p ${CURDIR}/vol/postgres-app
@@ -97,11 +101,14 @@ preparations:
 	# apache2
 	cat ${CURDIR}/wordpress/rootfs/tmp/vhost.conf \
 	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+	| sed 's|<WORDPRESS_URL>|"${WORDPRESS_URL}"|g' \
 	> ${CURDIR}/wordpress/rootfs/etc/apache2/sites-available/vhost.conf
 
 	# wp-config.php
 	cat ${CURDIR}/wordpress/rootfs/tmp/wp-config-sample.tmp.php \
 		| sed 's|<DAIQUIRI_URL>|"${DAIQUIRI_URL}"|g' \
+		| sed 's|<WORDPRESS_URL>|"${WORDPRESS_URL}"|g' \
+		| sed 's|<HTTP_HOST>|"${HTTP_HOST}"|g' \
 		| sed 's|<GLOBAL_PREFIX>|"${GLOBAL_PREFIX}"|g' \
 		| sed 's|<WORDPRESS_DB_NAME>|"${WORDPRESS_DB_NAME}"|g' \
 		| sed 's|<WORDPRESS_DB_USER>|"${WORDPRESS_DB_USER}"|g' \
@@ -114,6 +121,9 @@ run_build:
 
 run_volrm:
 	docker volume ls | xargs sudo docker volume rm 
+
+run_down:
+	docker-compose -f ./docker-compose.yaml down -v
 
 run_remove:
 	docker-compose down --rmi all 

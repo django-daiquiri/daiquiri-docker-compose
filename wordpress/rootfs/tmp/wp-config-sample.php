@@ -89,8 +89,11 @@ $table_prefix  = 'wp_';
 # $_SERVER['HTTP_HOST'] = 'www.astro-nfdi.org';
 # $_SERVER['SERVER_NAME'] = 'www.astro-nfdi.org';
 
-$_SERVER['HTTP_HOST'] = 'localhost';
-$_SERVER['SERVER_NAME'] = 'example.com';
+define( 'WP_HOME', "http://localhost:8080/cms" );
+define( 'WP_SITEURL', "http://localhost:8080/cms");
+
+# $_SERVER['HTTP_HOST'] = "localhost:8080";
+# $_SERVER['SERVER_NAME'] = "localhost:8080";
 
 define('DAIQUIRI_DEBUG', True);
 define('DAIQUIRI_URL', "localhost:9494");
