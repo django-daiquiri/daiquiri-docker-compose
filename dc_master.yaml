@@ -95,6 +95,8 @@ services:
             - postgresapp
         links: 
             - postgresdata
+        expose:
+            - "8080"
         volumes:
             - log:/vol/log
             - download:<DOWNLOAD_DIR>
@@ -107,6 +109,7 @@ services:
     wpdb:
         image: mysql:5.7
         container_name: <GLOBAL_PREFIX>wpdb
+        restart: always
         volumes:
             - wpdb:/var/lib/mysql
         env_file:
