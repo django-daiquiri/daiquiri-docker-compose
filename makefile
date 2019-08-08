@@ -85,11 +85,6 @@ preparations:
 		| sed 's|<DOWNLOAD_DIR>|"${DOWNLOAD_DIR}"|g' \
 		> ${TMP_LOCAL}
 
-	# Daiquiri nginx conf 
-	cat ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.tmp.conf \
-	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
-	> ${CURDIR}/daiquiri/rootfs/etc/nginx/conf.d/vhosts.conf
 
 	# Reverse proxy nginx conf 
 	cat ${CURDIR}/nginx/conf/vhost.tmp.conf \

@@ -7,11 +7,10 @@ mkdir -p /vol/log/daiquiri/
 
 /opt/install-daiquiri.sh
 
-while true; do
-    cd /vol/daiquiri/${DAIQUIRI_APP}
-    # gunicorn --bind unix:/var/run/daiquiri.sock config.wsgi:application -D 
-    gunicorn --bind 0.0.0.0:9001 --log-file=/vol/log/gunicorn/gunicorn.log config.wsgi:application -D
-    # --bind=0.0.0.0:8080
-    # nginx -g "daemon off;"
-    sleep 10
-done
+cd /vol/daiquiri/${DAIQUIRI_APP}
+
+exec gunicorn --bind 0.0.0.0:9001 \
+        --log-file=/vol/log/gunicorn/gunicorn.log \
+        --access-logfile=/vol/log/gunicorn/access.log \
+        --workers 2 \
+        config.wsgi:application 
