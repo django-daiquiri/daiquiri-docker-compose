@@ -90,7 +90,7 @@ $table_prefix  = 'wp_';
 # $_SERVER['SERVER_NAME'] = 'www.astro-nfdi.org';
 
 define( 'WP_HOME', <WORDPRESS_URL> );
-define( 'WP_SITEURL', <WORDPRESS_URL>);
+define( 'WP_SITEURL', <SITE_URL>);
 
 # $_SERVER['HTTP_HOST'] = <HTTP_HOST>;
 # $_SERVER['SERVER_NAME'] = <HTTP_HOST>;
