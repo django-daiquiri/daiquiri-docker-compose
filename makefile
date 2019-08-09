@@ -34,7 +34,7 @@ WORDPRESS_DB_HOST=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_DB_
 DAIQUIRI_URL=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=DAIQUIRI_URL=).*")
 WORDPRESS_URL=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=WORDPRESS_URL=).*")
 HTTP_HOST=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=HTTP_HOST=).*")
-PROXY_PASS=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=PROXY_PASS=).*")
+SITE_URL=$(shell cat ${CURDIR}/${VARS_WP} | grep -Po "(?<=SITE_URL=).*")
 
 all: preparations run_build tail_logs
 build: preparations run_build
@@ -85,7 +85,6 @@ preparations:
 		| sed 's|<DOWNLOAD_DIR>|"${DOWNLOAD_DIR}"|g' \
 		> ${TMP_LOCAL}
 
-
 	# Reverse proxy nginx conf 
 	cat ${CURDIR}/nginx/conf/vhost.tmp.conf \
 	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
@@ -97,13 +96,14 @@ preparations:
 	# apache2
 	cat ${CURDIR}/wordpress/conf/vhost.tmp.conf \
 	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-	| sed 's|<PROXY_PASS>|${PROXY_PASS}|g' \
+	| sed 's|<SITE_URL>|${SITE_URL}|g' \
 	> ${CURDIR}/wordpress/conf/vhost.conf
 
 	# wp-config.php
 	cat ${CURDIR}/wordpress/conf/wp-config-sample.tmp.php \
 		| sed 's|<DAIQUIRI_URL>|"${DAIQUIRI_URL}"|g' \
 		| sed 's|<WORDPRESS_URL>|"${WORDPRESS_URL}"|g' \
+		| sed 's|<SITE_URL>|"${SITE_URL}"|g' \
 		| sed 's|<HTTP_HOST>|"${HTTP_HOST}"|g' \
 		| sed 's|<GLOBAL_PREFIX>|"${GLOBAL_PREFIX}"|g' \
 		| sed 's|<WORDPRESS_DB_NAME>|"${WORDPRESS_DB_NAME}"|g' \

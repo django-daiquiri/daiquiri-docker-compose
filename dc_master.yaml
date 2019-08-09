@@ -97,6 +97,7 @@ services:
             - postgresapp
         links: 
             - postgresdata
+            - wpdb
         expose:
             - "9001"
         volumes:
