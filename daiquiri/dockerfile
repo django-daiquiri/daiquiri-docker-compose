@@ -4,7 +4,8 @@ ENV PATH=/vol/ve/bin:/opt:${PATH}
 
 RUN yum update -y && yum install -y \
     yum-utils \
-    epel-release 
+    epel-release \
+    wget
 
 RUN yum makecache
 
@@ -27,7 +28,15 @@ RUN yum install -y\
     glibc-devel \
     postgresql-libs \
     postgresql-devel \
-    python36-psycopg2 
+    python36-psycopg2 \
+    wp-cli
+
+# update php to 7.3
+RUN wget http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
+     rpm -Uvh remi-release-7.rpm && \
+     yum-config-manager --enable remi-php73 && \
+     yum update -y && \ 
+     yum install -y php-mysql
     
 RUN pip3 install gunicorn
 
