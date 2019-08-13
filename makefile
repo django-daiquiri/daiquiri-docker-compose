@@ -71,7 +71,7 @@ preparations:
 
 	# rewrite settings in local.py for Daiquiri
 	cat ${TMP_LOCAL_MASTER} \
-		| sed 's|<GLOBAL_PREFIX>|"${GLOBAL_PREFIX}"|g' \
+		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 		| sed 's|<POSTGRES_APP_DB>|"${POSTGRES_APP_DB}"|g' \
 		| sed 's|<POSTGRES_APP_USER>|"${POSTGRES_APP_USER}"|g' \
 		| sed 's|<POSTGRES_APP_PASSWORD>|"${POSTGRES_APP_PASSWORD}"|g' \

@@ -6,6 +6,8 @@ source /opt/ve.sh
 echo "***GIT CLONE APP***"
 git clone ${DAIQUIRI_APP_REPO} ${VOL}/daiquiri/${DAIQUIRI_APP}
 
+cp -f /tmp/template_local.py ${VOL}/daiquiri/${DAIQUIRI_APP}/config/settings/local.py
+
 if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
 
     # Get repos
@@ -23,7 +25,7 @@ if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
     # pip installs
     cd ${VOL}/daiquiri/${DAIQUIRI_APP}
     pip3 install -e ${VOL}/daiquiri/source
-    cp -f /tmp/template_local.py ${VOL}/daiquiri/${DAIQUIRI_APP}/config/settings/local.py
+#    cp -f /tmp/template_local.py ${VOL}/daiquiri/${DAIQUIRI_APP}/config/settings/local.py
     python3 ./manage.py makemigrations
     python3 manage.py migrate
     mkdir -p ${VOL}/daiquiri/${DAIQUIRI_APP}/vendor
