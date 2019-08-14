@@ -96,6 +96,24 @@ SENDFILE_BACKEND = 'sendfile.backends.xsendfile'
 LOGGING_DIR = "/vol/log/daiquiri/"
 QUERY_DOWNLOAD_DIR = <DOWNLOAD_DIR>
 
+DAIQUIRI_APPS = [
+    'daiquiri.archive',
+    'daiquiri.auth',
+    'daiquiri.conesearch',
+    'daiquiri.contact',
+    'daiquiri.core',
+    'daiquiri.files',
+    'daiquiri.jobs',
+    'daiquiri.meetings',
+    'daiquiri.metadata',
+    'daiquiri.oai',
+    'daiquiri.query',
+    'daiquiri.serve',
+    'daiquiri.stats',
+    'daiquiri.tap',
+    'daiquiri.uws',
+    'daiquiri.wordpress'
+]
 
 # WORDPRESS_PATH = '' or WORDPRESS_SSH
 WORDPRESS_URL = '/cms/'

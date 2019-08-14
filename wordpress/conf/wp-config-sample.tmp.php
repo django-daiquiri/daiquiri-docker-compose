@@ -80,7 +80,8 @@ $table_prefix  = 'wp_';
  */
 
 
- define('WP_DEBUG', false);
+ define('WP_DEBUG', true);
+ define( 'SCRIPT_DEBUG', true );
 
 #if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') { 
 #     $_SERVER['HTTPS'] = 'on'; 
@@ -88,6 +89,8 @@ $table_prefix  = 'wp_';
 # $_SERVER['HTTPS'] = 'on';
 # $_SERVER['HTTP_HOST'] = 'www.astro-nfdi.org';
 # $_SERVER['SERVER_NAME'] = 'www.astro-nfdi.org';
+
+define('CONCATENATE_SCRIPTS', false); 
 
 define( 'WP_HOME', <WORDPRESS_URL> );
 define( 'WP_SITEURL', <SITE_URL>);
