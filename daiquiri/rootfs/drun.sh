@@ -1,16 +1,25 @@
 #!/bin/bash
 
 # create log directories
-mkdir -p /vol/log/gunicorn/
-touch /vol/log/gunicorn/gunicorn-access.log
-mkdir -p /vol/log/daiquiri/
+mkdir -p ${VOL}/log/gunicorn/
+touch ${VOL}/log/gunicorn/access.log
+mkdir -p ${VOL}/log/daiquiri/
+mkdir -p ${VOL}/log/httpd/
+
 
 /opt/install-daiquiri.sh
 
-cd /vol/daiquiri/${DAIQUIRI_APP}
+/opt/install-wp.sh
 
-exec gunicorn --bind 0.0.0.0:9001 \
+
+cd /vol/daiquiri/${DAIQUIRI_APP}
+gunicorn --bind localhost:9001 \
         --log-file=/vol/log/gunicorn/gunicorn.log \
         --access-logfile=/vol/log/gunicorn/access.log \
         --workers 2 \
-        config.wsgi:application 
+        config.wsgi:application -D 
+
+while true; do 
+    /usr/sbin/httpd -D FOREGROUND
+    sleep 10
+done 
