@@ -1,11 +1,14 @@
   #!/bin/bash
 
-source /opt/ve.sh
 
 # clone app 
 echo "***GIT CLONE APP***"
 git clone ${DAIQUIRI_APP_REPO} ${VOL}/daiquiri/${DAIQUIRI_APP}
 
+# activate environment
+source /opt/ve.sh
+INVENV=$(python -c 'import sys; print ("1" if hasattr(sys, "real_prefix") else "0")')
+echo $INVENV
 cp -f /tmp/template_local.py ${VOL}/daiquiri/${DAIQUIRI_APP}/config/settings/local.py
 
 if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
@@ -35,3 +38,4 @@ if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
   else
       echo "Won't do anything because Daiquiri is already installed."
   fi
+

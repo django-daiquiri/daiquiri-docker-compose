@@ -117,6 +117,6 @@ DAIQUIRI_APPS = [
 
 # WORDPRESS_PATH = '' or WORDPRESS_SSH
 WORDPRESS_URL = '/cms/'
-WORDPRESS_PATH = '/var/www/html/wordpress/'
+WORDPRESS_PATH = '/vol/wp/'
 WORDPRESS_CLI = '/usr/bin/wp'
 

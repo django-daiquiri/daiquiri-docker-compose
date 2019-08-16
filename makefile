@@ -48,6 +48,7 @@ preparations:
 	mkdir -p ${CURDIR}/vol/download
 	mkdir -p ${CURDIR}/vol/ve
 	mkdir -p ${CURDIR}/vol/httpd
+	mkdir -p ${CURDIR}/vol/wp
 	mkdir -p ${CURDIR}/vol/wpdb
 
 	# create log directories

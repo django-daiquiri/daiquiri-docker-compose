@@ -52,8 +52,8 @@ RUN rm /etc/httpd/conf.d/*
 
 COPY ./rootfs /
 
-RUN useradd -ms /bin/bash daiquiri
-RUN chown -R daiquiri.daiquiri /home/daiquiri
+RUN useradd -ms /bin/bash daiquiri && \
+    usermod -g apache daiquiri
 # USER daiquiri
 
 CMD ["/drun.sh"]
