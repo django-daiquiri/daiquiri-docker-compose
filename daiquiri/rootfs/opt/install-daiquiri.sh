@@ -1,9 +1,12 @@
   #!/bin/bash
 
-
+echo "su daiquiri"
+whoami
+su daiquiri
+whoami
 # clone app 
 echo "***GIT CLONE APP***"
-git clone ${DAIQUIRI_APP_REPO} ${VOL}/daiquiri/${DAIQUIRI_APP}
+git clone -b dev ${DAIQUIRI_APP_REPO} ${VOL}/daiquiri/${DAIQUIRI_APP}
 
 # activate environment
 source /opt/ve.sh

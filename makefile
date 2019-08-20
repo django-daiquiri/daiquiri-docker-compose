@@ -53,7 +53,7 @@ preparations:
 
 	# create log directories
 	mkdir -p ${CURDIR}/vol/log
-	# chmod 777 -R ${CURDIR}/vol/log
+	chmod 777 -R ${CURDIR}/vol/log
 
 	# rewrite docker-compose.yaml
 	cat ${DC_MASTER} \
