@@ -92,11 +92,8 @@ $table_prefix  = 'wp_';
 
 define('CONCATENATE_SCRIPTS', false); 
 
-define( 'WP_HOME', <WORDPRESS_URL> );
-define( 'WP_SITEURL', <SITE_URL>);
-
-# $_SERVER['HTTP_HOST'] = <HTTP_HOST>;
-# $_SERVER['SERVER_NAME'] = <HTTP_HOST>;
+# define( 'WP_HOME', <WORDPRESS_URL> );
+# define( 'WP_SITEURL', <SITE_URL>);
 
 define('DAIQUIRI_DEBUG', True);
 define('DAIQUIRI_URL', <DAIQUIRI_URL>);

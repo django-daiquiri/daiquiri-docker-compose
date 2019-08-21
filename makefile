@@ -109,7 +109,12 @@ preparations:
 		| sed 's|<WORDPRESS_DB_HOST>|"${WORDPRESS_DB_HOST}"|g' \
 		| sed 's|<WORDPRESS_DB_PASSWORD>|"${WORDPRESS_DB_PASSWORD}"|g' \
 		> ${CURDIR}/daiquiri/rootfs/tmp/wp-config-sample.php
-	
+
+	# make a rule for firewall
+	# /sbin/iptables -A INPUT -i docker0 -j ACCEPT
+	# to be tested with firewalld
+	# firewall-cmd --permanent --zone=trusted --change-interface=docker0
+
 run_build:
 	docker-compose up --build -d
 
