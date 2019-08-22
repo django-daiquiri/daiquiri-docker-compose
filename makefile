@@ -31,7 +31,7 @@ DAIQUIRI_URL=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DAIQUIRI_URL=).*"
 WORDPRESS_URL=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=WORDPRESS_URL=).*")
 HTTP_HOST=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=HTTP_HOST=).*")
 SITE_URL=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=SITE_URL=).*")
-
+DOCKERHOST=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DOCKERHOST=).*")
 VARS_WP=$(shell if [ -f settings/wp.local ]; then echo settings/wp.local; else echo settings/wp.env; fi)
 
 all: preparations run_build tail_logs
@@ -82,18 +82,20 @@ preparations:
 		| sed 's|<POSTGRES_DATA_HOST>|"${POSTGRES_DATA_HOST}"|g' \
 		| sed 's|<POSTGRES_DATA_PORT>|"${POSTGRES_DATA_PORT}"|g' \
 		| sed 's|<DOWNLOAD_DIR>|"${DOWNLOAD_DIR}"|g' \
+		| sed 's|<DOCKERHOST>|${DOCKERHOST}|g' \
 		> ${CURDIR}/daiquiri/rootfs/tmp/template_local.py
 
 	# Reverse proxy nginx conf 
-	cat ${CURDIR}/nginx/conf/vhost.tmp.conf \
-	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
-	> ${CURDIR}/nginx/conf/vhost.conf
+	# cat ${CURDIR}/nginx/conf/vhost.tmp.conf \
+	# | sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+	# | sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
+	# > ${CURDIR}/nginx/conf/vhost.conf
 
 	# Wordpress
 	# apache2
 	cat ${CURDIR}/daiquiri/conf/vhost.tmp.conf \
 	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 	| sed 's|<SITE_URL>|${SITE_URL}|g' \
 	> ${CURDIR}/daiquiri/rootfs/etc/httpd/vhosts.d/vhost.conf
 

@@ -28,7 +28,7 @@ VENDOR_CDN = False
 '''
 The list of URLs und which this application available
 '''
-ALLOWED_HOSTS = ['localhost', 'ip6-localhost', '127.0.0.1', '0.0.0.0', '[::1]', '<GLOBAL_PREFIX>daiquiri', '<GLOBAL_PREFIX>nginx']
+ALLOWED_HOSTS = ['localhost', 'ip6-localhost', '127.0.0.1', '0.0.0.0', '[::1]', '<GLOBAL_PREFIX>daiquiri', '<GLOBAL_PREFIX>nginx', '<DOCKERHOST>']
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
