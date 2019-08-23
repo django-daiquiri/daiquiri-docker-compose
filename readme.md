@@ -7,33 +7,33 @@ This repository contains development setup for the django-daiquiri application. 
 
 ## Structure
 ### Dockers
-FOUR containers are going to be created running `Apache`, `PostgreSQL app`, `PostgreSQL data` and `daiquiri`.
+FOUR containers are going to be created running, `daiquiri` and the database dockers. 
 
 ### Volumes
 During build four folders later used as volumes will be created under `vol/`. They contain the following:
 
+* `daiquiri` daiquiri installation 
 * `log` log files
 * `download` download files
 * `postgres-app` database
 * `postgres-data` database
-* `daiquiri-app` installation
 * `ve` python's virtual environment
 
 
 ## Configuration & Usage
 1. Declare your settings in `*.local`
 
-    Default settings are stored in the 
-   `var/` folder. all `*.env` files are overwritten with each pull. To keep the local changes, copy `var/app.env` file to `var/app.local` and edit it. Same goes for the DB settings in `var/postgresapp.env` and `var/postgresdata.env`
+    Default settings are stored in the `var/` folder. all `*.env` files are overwritten with each pull. To keep the local changes, copy `var/app.env` file to `var/app.local` and edit it. Same goes for the DB settings in `var/postgresapp.env` and `var/postgresdata.env`
 
     The `makefile` will use the `*.local` file if such a file exists. 
-
+1. Copy `var/app.env` to `var/app.local`. Replace <DOCKERHOST> in the `var/app.local` file with the name of your host or the url which is supposed to serve daiquiri instance. 
+    
 1. Create a superuser for the Daiquiri instance
     
     ```shell
     # connect to the docker
     docker exec -ti daiquiri bash
-    cd app
+    cd /vol/daiquiri/app
     .manage.py createsuperuser
     ```
     Follow the steps to create a superuser.
