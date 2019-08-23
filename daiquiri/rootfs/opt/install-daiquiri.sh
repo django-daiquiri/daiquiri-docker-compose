@@ -25,9 +25,6 @@ if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
     pip3 install psycopg2-binary
     pip3 install astropy
 
-    # mkdir -p ${VOL}/daiquiri/${DAIQUIRI_APP}/config
-    # cp -f /tmp/wsgi.py ${VOL}/daiquiri/${DAIQUIRI_APP}/wsgi.py
-
     # pip installs
     cd ${VOL}/daiquiri/${DAIQUIRI_APP}
     pip3 install -e ${VOL}/daiquiri/source
