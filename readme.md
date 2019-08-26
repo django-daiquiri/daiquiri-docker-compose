@@ -26,29 +26,50 @@ During build four folders later used as volumes will be created under `vol/`. Th
     Default settings are stored in the `var/` folder. all `*.env` files are overwritten with each pull. To keep the local changes, copy `var/app.env` file to `var/app.local` and edit it. Same goes for the DB settings in `var/postgresapp.env` and `var/postgresdata.env`
 
     The `makefile` will use the `*.local` file if such a file exists. 
-1. Copy `var/app.env` to `var/app.local`. Replace <DOCKERHOST> in the `var/app.local` file with the name of your host or the url which is supposed to serve daiquiri instance. 
-    
-1. Create a superuser for the Daiquiri instance
-    
+1. Copy `var/app.env` to `var/app.local`. Replace <DOCKERHOST> in the `var/app.local` file with the name of your host or the url which is supposed to serve daiquiri instance.
+
+1. Connect to the daiquiri container
+
     ```shell
     # connect to the docker
-    docker exec -ti daiquiri bash
+    docker exec -ti dq-daiquiri bash
+    ```
+
+    Now you can use the terminal as on any other machine.
+
+1. Install the Wordpress instance, create superuser
+
+    Install the Wordpress instance, otherwise
+    ```shell
+     wp core install --path=/vol/wp --allow-root --url=DOCKERHOST:9494/cms --title=astrodocker --admin_user=wpadmin --admin_email=wpadmin@example.com  
+    ```
+
+1. Create daiquiri superuser
+    Inside the docker container activate the virtual env:
+    ```shell
+    source /opt/ve.sh
     cd /vol/daiquiri/app
     .manage.py createsuperuser
     ```
     Follow the steps to create a superuser.
 
     NOTICE: the email verification is set to optional (see "config/settings/local.py")
-    ```
+    ```shell
     # switch off email verification
     ACCOUNT_EMAIL_VERIFICATION = 'optional'
     ```
-1. Usefull commands
+
+
+1. Logs
+    You'll find logs in the `vol/logs/` folder. 
+
+1. Usefull commands on the docker host
 ```
 docker-compose -f ./docker-compose.yaml up --build -d
 docker-compose logs -f
 docker-compose -f ./docker-wptest.yaml down -v  
 ```
+
 The -v option removes the volumes.
 
 ```
@@ -56,6 +77,26 @@ sudo docker container ps -aq | xargs sudo docker stop
 sudo docker container ps -aq | xargs sudo docker rm
 sudo docker volume ls | sudo xargs docker volume rm 
 ```
+
+1. Docker armageddon
+If the docker on your system (mis)behaves strangely, use this script to end all of it. Stop and start the docker service in the end. 
+```bash
+#.bash
+removecontainers() {
+    sudo docker stop $(sudo docker ps -aq)
+    sudo docker rm $(sudo docker ps -aq)
+}
+
+armageddon() {
+    removecontainers
+    sudo docker network prune -f
+    sudo docker rmi -f $(sudo docker images --filter dangling=true -qa)
+    sudo docker volume rm $(sudo docker volume ls --filter dangling=true -q)
+    sudo docker rmi -f $(sudo docker images -qa)
+}
+
+```
+
 
 
 ## Multiple Daiquiri instances on a single docker host
