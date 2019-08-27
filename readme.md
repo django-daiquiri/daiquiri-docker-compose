@@ -2,25 +2,35 @@
 
 ## Synopsis
 
-This repository contains development setup for the django-daiquiri application. [docker compose](https://github.com/docker/compose/releases) is required to run the containers. If not configured differently the built Daiquiri instance should be available at `localhost:9494`. Please see below how setting can be changed.
+This repository contains development setup for the django-daiquiri application. [docker compose](https://github.com/docker/compose/releases) is required to run the containers. If not configured differently the built Daiquiri instance should be available at `dockerhost:9494`. Please see below how setting can be changed.
 
+## How to start
 
-## Structure
+How to use make:
+```bash
+    make                # prepare settings, build and run the docker container
+    make preparations   # fill in the local settings into the docker compose, etc.
+    make down           # stop the container, remove the volumes
+```
+See more details in the **Configuration and Usage** below. 
+
 ### Dockers
-FOUR containers are going to be created running, `daiquiri` and the database dockers. 
+FOUR containers are going to be created running, `daiquiri` and the database dockers.
 
 ### Volumes
 During build four folders later used as volumes will be created under `vol/`. They contain the following:
 
-* `daiquiri` daiquiri installation 
+* `daiquiri` daiquiri installation
+* `wp` Wordpress installation
 * `log` log files
 * `download` download files
-* `postgres-app` database
-* `postgres-data` database
 * `ve` python's virtual environment
+* `postgres-app` daiquiri application database
+* `postgres-data` data database
+* `wpdb` Wordpress database
 
 
-## Configuration & Usage
+## Configuration and usage
 1. Declare your settings in `*.local`
 
     Default settings are stored in the `var/` folder. all `*.env` files are overwritten with each pull. To keep the local changes, copy `var/app.env` file to `var/app.local` and edit it. Same goes for the DB settings in `var/postgresapp.env` and `var/postgresdata.env`
@@ -59,10 +69,6 @@ During build four folders later used as volumes will be created under `vol/`. Th
     ACCOUNT_EMAIL_VERIFICATION = 'optional'
     ```
 
-
-1. Logs
-    You'll find logs in the `vol/logs/` folder. 
-
 1. Usefull commands on the docker host
 ```
 docker-compose -f ./docker-compose.yaml up --build -d
@@ -79,25 +85,15 @@ sudo docker volume ls | sudo xargs docker volume rm
 ```
 
 1. Docker armageddon
-If the docker on your system (mis)behaves strangely, use this script to end all of it. Stop and start the docker service in the end. 
+If the docker on your system (mis)behaves strangely, use following script to end all of it. Stop and start the docker service in the end. 
 ```bash
-#.bash
-removecontainers() {
     sudo docker stop $(sudo docker ps -aq)
     sudo docker rm $(sudo docker ps -aq)
-}
-
-armageddon() {
-    removecontainers
     sudo docker network prune -f
     sudo docker rmi -f $(sudo docker images --filter dangling=true -qa)
     sudo docker volume rm $(sudo docker volume ls --filter dangling=true -q)
     sudo docker rmi -f $(sudo docker images -qa)
-}
-
 ```
-
-
 
 ## Multiple Daiquiri instances on a single docker host
 You can have multiple running Daiquiri instances on a single docker host as long as you pay attention to three things.
