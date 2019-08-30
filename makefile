@@ -2,6 +2,8 @@ CURDIR=$(shell pwd)
 DC_MASTER="dc_master.yaml"
 DC_TEMP="docker-compose.yaml"
 
+SAMPLE_LOCAL=$(shell if [ -f settings/sample.local.tmp.py ]; then echo settings/sample.local.tmp.py; else echo settings/sample.env.tmp.py; fi)
+	
 VARS_ENV=$(shell if [ -f settings/app.local ]; then echo settings/app.local; else echo settings/app.env; fi)
 FINALLY_EXPOSED_PORT=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=FINALLY_EXPOSED_PORT=)[0-9]+")
 GLOBAL_PREFIX=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=GLOBAL_PREFIX=).*")
@@ -68,7 +70,8 @@ preparations:
 		> ${DC_TEMP}
 
 	# rewrite settings in local.py for Daiquiri
-	cat ${CURDIR}/daiquiri/conf/template_local.tmp.py \
+	# check if there is sample.local.tmp.py in settings/ else take sample.env.tmp.py
+	cat ${CURDIR}/settings/${SAMPLE_LOCAL} \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 		| sed 's|<POSTGRES_APP_DB>|"${POSTGRES_APP_DB}"|g' \
 		| sed 's|<POSTGRES_APP_USER>|"${POSTGRES_APP_USER}"|g' \

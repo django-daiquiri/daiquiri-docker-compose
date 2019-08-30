@@ -1,9 +1,5 @@
-  #!/bin/bash
+#!/bin/bash
 
-echo "su daiquiri"
-whoami
-su daiquiri
-whoami
 # clone app 
 echo "***GIT CLONE APP***"
 git clone -b dev ${DAIQUIRI_APP_REPO} ${VOL}/daiquiri/${DAIQUIRI_APP}
@@ -28,7 +24,6 @@ if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
     # pip installs
     cd ${VOL}/daiquiri/${DAIQUIRI_APP}
     pip3 install -e ${VOL}/daiquiri/source
-    cp -f /tmp/template_local.py ${VOL}/daiquiri/${DAIQUIRI_APP}/config/settings/local.py
     python3 ./manage.py makemigrations
     python3 manage.py migrate
     mkdir -p ${VOL}/daiquiri/${DAIQUIRI_APP}/vendor

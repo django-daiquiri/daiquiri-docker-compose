@@ -33,10 +33,18 @@ During build four folders later used as volumes will be created under `vol/`. Th
 ## Configuration and usage
 1. Declare your settings in `*.local`
 
-    Default settings are stored in the `var/` folder. all `*.env` files are overwritten with each pull. To keep the local changes, copy `var/app.env` file to `var/app.local` and edit it. Same goes for the DB settings in `var/postgresapp.env` and `var/postgresdata.env`
+    Default settings are stored in the `settings/` folder. all `*.env` files are overwritten with each pull. To keep the local changes, copy `settings/app.env` file to `settings/app.local` and edit it. Same goes for the 
+    DB settings in `var/postgresapp.env` and `var/postgresdata.env`
+    ```shell
+        cd settings
+        cp app.env app.local    #settings for the app: URL, DB access, etc.
+        cp sample.env.tmp.py sample.local.tmp.py #daiquiri `local.py` template
+        cp postgresapp.env postgressapp.local # daiquiri app DB settings
+        cp postgredata.env postgresdata.local # daiquiri data DB settings
+    ```
+    The `makefile` will use the `*local*` file if such a file exists. 
 
-    The `makefile` will use the `*.local` file if such a file exists. 
-1. Copy `var/app.env` to `var/app.local`. Replace <DOCKERHOST> in the `var/app.local` file with the name of your host or the url which is supposed to serve daiquiri instance.
+    Replace <DOCKERHOST> in the `var/app.local` file with the name of your host or the url which is supposed to serve daiquiri instance.
 
 1. Connect to the daiquiri container
 
@@ -51,7 +59,7 @@ During build four folders later used as volumes will be created under `vol/`. Th
 
     Install the Wordpress instance, otherwise
     ```shell
-     wp core install --path=/vol/wp --allow-root --url=DOCKERHOST:9494/cms --title=astrodocker --admin_user=wpadmin --admin_email=wpadmin@example.com  
+     wp core install --path=/vol/wp --allow-root --url=DOCKERHOST:9494/cms --title=YOURTITLE --admin_user=wpadmin --admin_email=wpadmin@example.com  
     ```
 
 1. Create daiquiri superuser
