@@ -96,7 +96,7 @@ services:
             - "<FINALLY_EXPOSED_PORT>:80"
         volumes:
             - log:/vol/log
-            - download:<DOWNLOAD_DIR>
+            - download:<QUERY_DOWNLOAD_DIR>
             - daiquiri:/vol/daiquiri
             - ve:/vol/ve
             - wp:/vol/wp

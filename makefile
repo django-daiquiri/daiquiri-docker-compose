@@ -7,7 +7,7 @@ SAMPLE_LOCAL=$(shell if [ -f settings/sample.local.tmp.py ]; then echo settings/
 VARS_ENV=$(shell if [ -f settings/app.local ]; then echo settings/app.local; else echo settings/app.env; fi)
 FINALLY_EXPOSED_PORT=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=FINALLY_EXPOSED_PORT=)[0-9]+")
 GLOBAL_PREFIX=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=GLOBAL_PREFIX=).*")
-DOWNLOAD_DIR=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DOWNLOAD_DIR=).*")
+QUERY_DOWNLOAD_DIR=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=QUERY_DOWNLOAD_DIR=).*")
 DAIQUIRI_APP=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DAIQUIRI_APP=).*")
 
 # Postgres data and app
@@ -66,7 +66,7 @@ preparations:
 		| sed 's|<VARIABLES_DB_APP>|${VARS_DB_APP}|g' \
 		| sed 's|<VARIABLES_DB_DATA>|${VARS_DB_DATA}|g' \
 		| sed 's|<VARIABLES_WP>|${VARS_WP}|g' \
-		| sed 's|<DOWNLOAD_DIR>|${DOWNLOAD_DIR}|g' \
+		| sed 's|<QUERY_DOWNLOAD_DIR>|${QUERY_DOWNLOAD_DIR}|g' \
 		> ${DC_TEMP}
 
 	# rewrite settings in local.py for Daiquiri
@@ -83,7 +83,7 @@ preparations:
 		| sed 's|<POSTGRES_DATA_PASSWORD>|"${POSTGRES_DATA_PASSWORD}"|g' \
 		| sed 's|<POSTGRES_DATA_HOST>|"${POSTGRES_DATA_HOST}"|g' \
 		| sed 's|<POSTGRES_DATA_PORT>|"${POSTGRES_DATA_PORT}"|g' \
-		| sed 's|<DOWNLOAD_DIR>|"${DOWNLOAD_DIR}"|g' \
+		| sed 's|<QUERY_DOWNLOAD_DIR>|"${QUERY_DOWNLOAD_DIR}"|g' \
 		| sed 's|<DOCKERHOST>|${DOCKERHOST}|g' \
 		> ${CURDIR}/daiquiri/rootfs/tmp/template_local.py
 

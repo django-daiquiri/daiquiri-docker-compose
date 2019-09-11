@@ -6,7 +6,6 @@ git clone -b dev ${DAIQUIRI_APP_REPO} ${VOL}/daiquiri/${DAIQUIRI_APP}
 
 # activate environment
 source /opt/ve.sh
-cp -f /tmp/template_local.py ${VOL}/daiquiri/${DAIQUIRI_APP}/config/settings/local.py
 
 pip3 install --upgrade pip
 pip3 install gunicorn

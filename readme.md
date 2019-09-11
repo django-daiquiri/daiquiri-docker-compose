@@ -38,7 +38,6 @@ During build four folders later used as volumes will be created under `vol/`. Th
     ```shell
         cd settings
         cp app.env app.local    #settings for the app: URL, DB access, etc.
-        cp sample.env.tmp.py sample.local.tmp.py #daiquiri `local.py` template
         cp postgresapp.env postgressapp.local # daiquiri app DB settings
         cp postgredata.env postgresdata.local # daiquiri data DB settings
     ```
@@ -67,14 +66,14 @@ During build four folders later used as volumes will be created under `vol/`. Th
     ```shell
     source /opt/ve.sh
     cd /vol/daiquiri/app
-    .manage.py createsuperuser
+    ./manage.py createsuperuser
     ```
     Follow the steps to create a superuser.
 
     NOTICE: the email verification is set to optional (see "config/settings/local.py")
     ```shell
     # switch off email verification
-    ACCOUNT_EMAIL_VERIFICATION = 'optional'
+    ACCOUNT_EMAIL_VERIFICATION='optional'
     ```
 
 1. Usefull commands on the docker host
