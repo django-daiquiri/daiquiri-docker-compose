@@ -2,7 +2,7 @@
 
 # clone app 
 echo "***GIT CLONE APP***"
-git clone -b dev ${DAIQUIRI_APP_REPO} ${VOL}/daiquiri/${DAIQUIRI_APP}
+git clone ${DAIQUIRI_APP_REPO} ${VOL}/daiquiri/${DAIQUIRI_APP}
 
 # activate environment
 source /opt/ve.sh
@@ -13,7 +13,7 @@ pip3 install gunicorn
 if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
 
     # Get repos
-    git clone -b dev ${DAIQUIRI_REPO} ${VOL}/daiquiri/source
+    git clone ${DAIQUIRI_REPO} ${VOL}/daiquiri/source
 
     pip3 install --upgrade wheel
     pip3 install --upgrade setuptools

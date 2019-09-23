@@ -13,6 +13,12 @@ volumes:
             type: none
             device: <CURDIR>/vol/download
             o: bind
+    files:
+        name: <GLOBAL_PREFIX>files
+        driver_opts:
+            type: none
+            device: <CURDIR>/vol/files
+            o: bind
     postgresapp:
         name: <GLOBAL_PREFIX>postgresapp
         driver_opts:
@@ -96,7 +102,8 @@ services:
             - "<FINALLY_EXPOSED_PORT>:80"
         volumes:
             - log:/vol/log
-            - download:<QUERY_DOWNLOAD_DIR>
+            - download:/vol/download
+            - files:/vol/files
             - daiquiri:/vol/daiquiri
             - ve:/vol/ve
             - wp:/vol/wp

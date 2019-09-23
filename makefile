@@ -8,6 +8,7 @@ VARS_ENV=$(shell if [ -f settings/app.local ]; then echo settings/app.local; els
 FINALLY_EXPOSED_PORT=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=FINALLY_EXPOSED_PORT=)[0-9]+")
 GLOBAL_PREFIX=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=GLOBAL_PREFIX=).*")
 QUERY_DOWNLOAD_DIR=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=QUERY_DOWNLOAD_DIR=).*")
+ARCHIVE_BASE_PATH=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=ARCHIVE_BASE_PATH=).*")
 DAIQUIRI_APP=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DAIQUIRI_APP=).*")
 
 # Postgres data and app
@@ -48,6 +49,7 @@ preparations:
 	mkdir -p ${CURDIR}/vol/postgres-data
 	mkdir -p ${CURDIR}/vol/daiquiri
 	mkdir -p ${CURDIR}/vol/download
+	mkdir -p ${CURDIR}/vol/files
 	mkdir -p ${CURDIR}/vol/ve
 	mkdir -p ${CURDIR}/vol/wp
 	mkdir -p ${CURDIR}/vol/wpdb
@@ -67,25 +69,8 @@ preparations:
 		| sed 's|<VARIABLES_DB_DATA>|${VARS_DB_DATA}|g' \
 		| sed 's|<VARIABLES_WP>|${VARS_WP}|g' \
 		| sed 's|<QUERY_DOWNLOAD_DIR>|${QUERY_DOWNLOAD_DIR}|g' \
+		| sed 's|<ARCHIVE_BASE_PATH>|${ARCHIVE_BASE_PATH}|g' \
 		> ${DC_TEMP}
-
-	# rewrite settings in local.py for Daiquiri
-	# check if there is sample.local.tmp.py in settings/ else take sample.env.tmp.py
-	cat ${CURDIR}/settings/${SAMPLE_LOCAL} \
-		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-		| sed 's|<POSTGRES_APP_DB>|"${POSTGRES_APP_DB}"|g' \
-		| sed 's|<POSTGRES_APP_USER>|"${POSTGRES_APP_USER}"|g' \
-		| sed 's|<POSTGRES_APP_PASSWORD>|"${POSTGRES_APP_PASSWORD}"|g' \
-		| sed 's|<POSTGRES_APP_HOST>|"${POSTGRES_APP_HOST}"|g' \
-		| sed 's|<POSTGRES_APP_PORT>|"${POSTGRES_APP_PORT}"|g' \
-		| sed 's|<POSTGRES_DATA_DB>|"${POSTGRES_DATA_DB}"|g' \
-		| sed 's|<POSTGRES_DATA_USER>|"${POSTGRES_DATA_USER}"|g' \
-		| sed 's|<POSTGRES_DATA_PASSWORD>|"${POSTGRES_DATA_PASSWORD}"|g' \
-		| sed 's|<POSTGRES_DATA_HOST>|"${POSTGRES_DATA_HOST}"|g' \
-		| sed 's|<POSTGRES_DATA_PORT>|"${POSTGRES_DATA_PORT}"|g' \
-		| sed 's|<QUERY_DOWNLOAD_DIR>|"${QUERY_DOWNLOAD_DIR}"|g' \
-		| sed 's|<DOCKERHOST>|${DOCKERHOST}|g' \
-		> ${CURDIR}/daiquiri/rootfs/tmp/template_local.py
 
 	# Reverse proxy nginx conf 
 	# cat ${CURDIR}/nginx/conf/vhost.tmp.conf \

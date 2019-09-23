@@ -24,6 +24,7 @@ During build four folders later used as volumes will be created under `vol/`. Th
 * `wp` Wordpress installation
 * `log` log files
 * `download` download files
+* `files` files directory
 * `ve` python's virtual environment
 * `postgres-app` daiquiri application database
 * `postgres-data` data database
@@ -45,6 +46,14 @@ During build four folders later used as volumes will be created under `vol/`. Th
 
     Replace <DOCKERHOST> in the `var/app.local` file with the name of your host or the url which is supposed to serve daiquiri instance.
 
+1. Run!
+
+    Run the make script will set the settings to the docker-compose master file, build and run the dockers. 
+
+    ```
+        make
+    ```
+
 1. Connect to the daiquiri container
 
     ```shell
@@ -56,13 +65,16 @@ During build four folders later used as volumes will be created under `vol/`. Th
 
 1. Install the Wordpress instance, create superuser
 
-    Install the Wordpress instance, otherwise
+    Install the Wordpress instance via commandline in the docker or by going to 
     ```shell
-     wp core install --path=/vol/wp --allow-root --url=DOCKERHOST:9494/cms --title=YOURTITLE --admin_user=wpadmin --admin_email=wpadmin@example.com  
+     wp core install --path=/vol/wp --allow-root --url=DOCKERHOST:9494/cms --title=YOURTITLE --admin_user=wpadmin --admin_pass=YOURPASSWORD--admin_email=wpadmin@example.com  
     ```
+
+    Activate the Daiquiri plugin and choose the Daiquir theme via `<DOCKERHOST>:9494/wp-admin/`
 
 1. Create daiquiri superuser
     Inside the docker container activate the virtual env:
+    
     ```shell
     source /opt/ve.sh
     cd /vol/daiquiri/app
@@ -70,36 +82,43 @@ During build four folders later used as volumes will be created under `vol/`. Th
     ```
     Follow the steps to create a superuser.
 
-    NOTICE: the email verification is set to optional (see "config/settings/local.py")
+    NOTICE: the email verification is set to optional
     ```shell
     # switch off email verification
     ACCOUNT_EMAIL_VERIFICATION='optional'
     ```
 
+    Set an env variable inside the docker:
+    ```shell
+     `env DEBUG=True`
+    ```
+
 1. Usefull commands on the docker host
 ```
-docker-compose -f ./docker-compose.yaml up --build -d
-docker-compose logs -f
-docker-compose -f ./docker-wptest.yaml down -v  
+    docker-compose -f ./docker-compose.yaml up --build -d
+    docker-compose logs -f
+    docker-compose -f ./docker-wptest.yaml down -v  
 ```
 
-The -v option removes the volumes.
+The -v option removes the volumes. Try with `sudo` if it doesn't work. 
 
 ```
-sudo docker container ps -aq | xargs sudo docker stop
-sudo docker container ps -aq | xargs sudo docker rm
-sudo docker volume ls | sudo xargs docker volume rm 
+    docker container ps -aq | xargs docker stop
+    docker container ps -aq | xargs docker rm
+    docker volume ls |  xargs docker volume rm 
 ```
 
 1. Docker armageddon
 If the docker on your system (mis)behaves strangely, use following script to end all of it. Stop and start the docker service in the end. 
+
+**WARNING: do not use it on your productive system**
 ```bash
-    sudo docker stop $(sudo docker ps -aq)
-    sudo docker rm $(sudo docker ps -aq)
-    sudo docker network prune -f
-    sudo docker rmi -f $(sudo docker images --filter dangling=true -qa)
-    sudo docker volume rm $(sudo docker volume ls --filter dangling=true -q)
-    sudo docker rmi -f $(sudo docker images -qa)
+    docker stop $(sudo docker ps -aq)
+    docker rm $(sudo docker ps -aq)
+    docker network prune -f
+    docker rmi -f $(sudo docker images --filter dangling=true -qa)
+    docker volume rm $(sudo docker volume ls --filter dangling=true -q)
+    docker rmi -f $(sudo docker images -qa)
 ```
 
 ## Multiple Daiquiri instances on a single docker host
