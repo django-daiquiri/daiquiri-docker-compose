@@ -2,7 +2,7 @@ FROM postgres:latest
 
 ENV PATH="${PATH}:/opt"
 
-RUN apt update -y && apt install \
+RUN apt update -y && apt install -y \
     postgresql-client
 
 # create DB, user, permissions

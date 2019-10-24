@@ -5,4 +5,4 @@ settings/sample.local.tmp.py
 daiquiri/rootfs/tmp/template_local.py
 notes.md
 daiquiri-centos/
-wordpress/rootfs/tmp/wp-config-samle.ph
+wordpress/rootfs/tmp/wp-config-sample.php
