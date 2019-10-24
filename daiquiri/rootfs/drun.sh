@@ -13,18 +13,24 @@ chown -R daiquiri:apache ${VOL}/wp
 chown -R daiquiri:apache ${VOL}/log/daiquiri
 
 /opt/install-daiquiri.sh
-chown -R daiquiri:apache ${VOL}/daiquiri 
+chown -R daiquiri:apache ${VOL}/daiquiri
 
 whoami
 
-cd /vol/daiquiri/${DAIQUIRI_APP}
-gunicorn --bind 0.0.0.0:9001 \
-        --log-file=/vol/log/gunicorn/gunicorn.log \
-        --access-logfile=/vol/log/gunicorn/access.log \
-        --workers 2 \
-        config.wsgi:application -D 
 
-while true; do 
+cd /vol/daiquiri/${DAIQUIRI_APP}
+
+if [[ ! -f ./config/settings/local.py ]]; then
+    cp /tmp/template_local.py ./config/settings/local.py
+fi
+
+gunicorn --bind 0.0.0.0:9001 \
+    --log-file=/vol/log/gunicorn/gunicorn.log \
+    --access-logfile=/vol/log/gunicorn/access.log \
+    --workers 2 \
+    config.wsgi:application -D
+
+while true; do
     /usr/sbin/httpd -D FOREGROUND
     sleep 10
-done 
+done
