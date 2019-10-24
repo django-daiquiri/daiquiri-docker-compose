@@ -31,6 +31,7 @@ gunicorn --bind 0.0.0.0:9001 \
     config.wsgi:application -D
 
 while true; do
+    rm -f /var/run/httpd/*.pid
     /usr/sbin/httpd -D FOREGROUND
     sleep 10
 done
