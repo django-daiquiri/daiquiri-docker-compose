@@ -1,5 +1,12 @@
 version: "3.7"
 
+networks:
+    daiquiri_net:
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.22.22.0/28
+
 volumes:
     log:
         name: <GLOBAL_PREFIX>log
@@ -58,44 +65,13 @@ volumes:
             o: bind
 
 services:
-    postgresapp:
-        build:
-            context: ./postgresapp
-        container_name: <GLOBAL_PREFIX>postgresapp
-        volumes:
-            - postgresapp:/var/lib/postgresql/data
-        restart: always
-        env_file:
-            - <VARIABLES_DB_APP>
-
-    postgresdata:
-        build:
-            context: ./postgresdata
-        container_name: <GLOBAL_PREFIX>postgresdata
-        volumes:
-            - postgresdata:/var/lib/postgresql/data
-        restart: always
-        env_file:
-            - <VARIABLES_DB_DATA>
-
-
-    wpdb:
-        image: mysql:5.7
-        container_name: <GLOBAL_PREFIX>wpdb
-        volumes:
-            - wpdb:/var/lib/mysql
-        restart: always
-        env_file:
-            - <VARIABLES_WP>
-
-               
     daiquiri:
         build:
             context: ./daiquiri
         container_name: <GLOBAL_PREFIX>daiquiri
         depends_on:
             - postgresapp
-        links: 
+        links:
             - postgresdata
             - wpdb
         ports:
@@ -110,4 +86,45 @@ services:
         restart: always
         env_file:
             - <VARIABLES_FILE>
+        networks:
+            daiquiri_net:
+                ipv4_address: 172.22.22.11
 
+    postgresapp:
+        build:
+            context: ./postgresapp
+        container_name: <GLOBAL_PREFIX>postgresapp
+        volumes:
+            - postgresapp:/var/lib/postgresql/data
+        restart: always
+        env_file:
+            - <VARIABLES_DB_APP>
+        networks:
+            daiquiri_net:
+                ipv4_address: 172.22.22.12
+
+    postgresdata:
+        build:
+            context: ./postgresdata
+        container_name: <GLOBAL_PREFIX>postgresdata
+        volumes:
+            - postgresdata:/var/lib/postgresql/data
+        restart: always
+        env_file:
+            - <VARIABLES_DB_DATA>
+        networks:
+            daiquiri_net:
+                ipv4_address: 172.22.22.13
+
+
+    wpdb:
+        image: mysql:5.7
+        container_name: <GLOBAL_PREFIX>wpdb
+        volumes:
+            - wpdb:/var/lib/mysql
+        restart: always
+        env_file:
+            - <VARIABLES_WP>
+        networks:
+            daiquiri_net:
+                ipv4_address: 172.22.22.14

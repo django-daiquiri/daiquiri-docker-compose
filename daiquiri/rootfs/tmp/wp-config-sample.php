@@ -92,11 +92,11 @@ $table_prefix  = 'wp_';
 
 define('CONCATENATE_SCRIPTS', false); 
 
-# define( 'WP_HOME', "http://<DOCKERHOST>:9494/cms /cms/" );
-# define( 'WP_SITEURL', "http://<DOCKERHOST>:9494/cms http://<DOCKERHOST>:9494");
+# define( 'WP_HOME', "/cms/" );
+# define( 'WP_SITEURL', "");
 
 define('DAIQUIRI_DEBUG', True);
-define('DAIQUIRI_URL', "http://<DOCKERHOST>:9494/");
+define('DAIQUIRI_URL', "http://172.22.22.11");
 
 
 define('COOKIEPATH','/cms');
