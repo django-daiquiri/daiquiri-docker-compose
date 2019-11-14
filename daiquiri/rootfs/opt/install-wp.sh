@@ -19,6 +19,12 @@ fi
 
 if [[ ! -f ./wp-config.php ]]; then
     cp /tmp/wp-config-sample.php ./wp-config.php
+    ip=$(
+        ping -c 1 dq-daiquiri \
+            | grep -Po "([0-9]{1,3}[\.]){3}[0-9]{1,3}" \
+            | head -n 1
+    )
+    sed -i "s/<DAIQUIRI_CONTAINER_IP>/${ip}/g" ./wp-config.php
 fi
 
 # Daiquiri theme and plugin

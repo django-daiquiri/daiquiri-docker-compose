@@ -89,7 +89,6 @@ preparations:
 
 	# wp-config.php
 	cat ${CURDIR}/daiquiri/conf/wp-config-sample.tmp.php \
-		| sed 's|<DAIQUIRI_URL>|"${DAIQUIRI_URL}"|g' \
 		| sed 's|<WORDPRESS_URL>|"${WORDPRESS_URL}"|g' \
 		| sed 's|<SITE_URL>|"${SITE_URL}"|g' \
 		| sed 's|<HTTP_HOST>|"${HTTP_HOST}"|g' \

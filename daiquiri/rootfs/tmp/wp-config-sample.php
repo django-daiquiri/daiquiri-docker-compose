@@ -83,20 +83,20 @@ $table_prefix  = 'wp_';
  define('WP_DEBUG', true);
  define( 'SCRIPT_DEBUG', true );
 
-#if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') { 
-#     $_SERVER['HTTPS'] = 'on'; 
-# 
+#if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+#     $_SERVER['HTTPS'] = 'on';
+#
 # $_SERVER['HTTPS'] = 'on';
 # $_SERVER['HTTP_HOST'] = 'www.astro-nfdi.org';
 # $_SERVER['SERVER_NAME'] = 'www.astro-nfdi.org';
 
-define('CONCATENATE_SCRIPTS', false); 
+define('CONCATENATE_SCRIPTS', false);
 
 # define( 'WP_HOME', "/cms/" );
 # define( 'WP_SITEURL', "");
 
 define('DAIQUIRI_DEBUG', True);
-define('DAIQUIRI_URL', "http://172.22.22.11");
+define('DAIQUIRI_URL', '<DAIQUIRI_CONTAINER_IP>');
 
 
 define('COOKIEPATH','/cms');

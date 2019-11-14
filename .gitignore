@@ -4,3 +4,4 @@ vol/
 docker-compose.yaml
 notes.md
 settings/sample.local.tmp.py
+daiquiri/rootfs/tmp/wp-config-sample.php

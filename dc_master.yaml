@@ -1,12 +1,5 @@
 version: "3.7"
 
-networks:
-    daiquiri_net:
-        ipam:
-            driver: default
-            config:
-                - subnet: 172.22.22.0/28
-
 volumes:
     log:
         name: <GLOBAL_PREFIX>log
@@ -86,9 +79,6 @@ services:
         restart: always
         env_file:
             - <VARIABLES_FILE>
-        networks:
-            daiquiri_net:
-                ipv4_address: 172.22.22.11
 
     postgresapp:
         build:
@@ -99,9 +89,6 @@ services:
         restart: always
         env_file:
             - <VARIABLES_DB_APP>
-        networks:
-            daiquiri_net:
-                ipv4_address: 172.22.22.12
 
     postgresdata:
         build:
@@ -112,10 +99,6 @@ services:
         restart: always
         env_file:
             - <VARIABLES_DB_DATA>
-        networks:
-            daiquiri_net:
-                ipv4_address: 172.22.22.13
-
 
     wpdb:
         image: mysql:5.7
@@ -125,6 +108,3 @@ services:
         restart: always
         env_file:
             - <VARIABLES_WP>
-        networks:
-            daiquiri_net:
-                ipv4_address: 172.22.22.14
