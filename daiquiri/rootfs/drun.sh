@@ -17,12 +17,8 @@ chown -R daiquiri:apache ${VOL}/daiquiri
 
 whoami
 
-
 cd /vol/daiquiri/${DAIQUIRI_APP}
 
-if [[ ! -f ./config/settings/local.py ]]; then
-    cp /tmp/template_local.py ./config/settings/local.py
-fi
 
 gunicorn --bind 0.0.0.0:9001 \
     --log-file=/vol/log/gunicorn/gunicorn.log \
