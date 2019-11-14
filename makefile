@@ -3,7 +3,7 @@ DC_MASTER="dc_master.yaml"
 DC_TEMP="docker-compose.yaml"
 
 SAMPLE_LOCAL=$(shell if [ -f settings/sample.local.tmp.py ]; then echo settings/sample.local.tmp.py; else echo settings/sample.env.tmp.py; fi)
-	
+
 VARS_ENV=$(shell if [ -f settings/app.local ]; then echo settings/app.local; else echo settings/app.env; fi)
 FINALLY_EXPOSED_PORT=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=FINALLY_EXPOSED_PORT=)[0-9]+")
 GLOBAL_PREFIX=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=GLOBAL_PREFIX=).*")
@@ -41,6 +41,7 @@ all: preparations run_build tail_logs
 build: preparations run_build
 fromscratch: preparations run_remove run_build
 remove: run_remove
+restart: run_restart
 down: run_down
 logs: tail_logs
 
@@ -72,7 +73,7 @@ preparations:
 		| sed 's|<ARCHIVE_BASE_PATH>|${ARCHIVE_BASE_PATH}|g' \
 		> ${DC_TEMP}
 
-	# Reverse proxy nginx conf 
+	# Reverse proxy nginx conf
 	# cat ${CURDIR}/nginx/conf/vhost.tmp.conf \
 	# | sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 	# | sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
@@ -108,15 +109,18 @@ run_build:
 	docker-compose up --build -d
 
 run_volrm:
-	docker volume ls | xargs sudo docker volume rm 
+	docker volume ls | xargs sudo docker volume rm
 
 run_down:
 	docker-compose -f ./docker-compose.yaml down -v
 
 run_remove:
-	docker-compose down --rmi all 
+	docker-compose down --rmi all
 	docker-compose down -v
 	docker-compose rm --force
 
 tail_logs:
 	docker-compose logs -f
+
+run_restart:
+	sudo docker-compose restart
