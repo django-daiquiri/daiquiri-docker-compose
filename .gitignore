@@ -5,3 +5,6 @@ docker-compose.yaml
 notes.md
 settings/sample.local.tmp.py
 daiquiri/rootfs/tmp/wp-config-sample.php
+daiquiri/rootfs/etc/httpd/conf/httpd.conf
+nginx_rp/conf/server.conf
+daiquiri/rootfs/etc/httpd/vhosts/vhost.conf
