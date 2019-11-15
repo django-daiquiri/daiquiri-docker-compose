@@ -96,7 +96,7 @@ define('CONCATENATE_SCRIPTS', false);
 # define( 'WP_SITEURL', <SITE_URL>);
 
 define('DAIQUIRI_DEBUG', True);
-define('DAIQUIRI_URL', '<DAIQUIRI_CONTAINER_IP>');
+define('DAIQUIRI_URL', '<GENERIC_PLACEHOLDER>');
 
 
 define('COOKIEPATH','/cms');
