@@ -114,7 +114,7 @@ run_down:
 	docker-compose -f ./docker-compose.yaml down -v
 
 run_remove:
-	docker-compose down --rmi all
+	docker-compose down 
 	docker-compose down -v
 	docker-compose rm --force
 
