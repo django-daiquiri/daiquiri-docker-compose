@@ -4,7 +4,10 @@ vol/
 docker-compose.yaml
 notes.md
 settings/sample.local.tmp.py
-daiquiri/rootfs/tmp/wp-config-sample.php
-daiquiri/rootfs/etc/httpd/conf/httpd.conf
 nginx_rp/conf/server.conf
-daiquiri/rootfs/etc/httpd/vhosts/vhost.conf
+
+# files that are written by the makefile
+daiquiri/rootfs/etc/httpd/conf/httpd.conf
+daiquiri/rootfs/etc/httpd/vhosts.d/vhost.conf
+daiquiri/rootfs/tmp/wp-config-sample.php
+nginx_rp/conf/server.tmp.conf
