@@ -23,7 +23,7 @@ ping -c 1 dq-daiquiri \
     | grep -Po "([0-9]{1,3}[\.]){3}[0-9]{1,3}" \
     | head -n 1
 )
-sed -i "s|\('DAIQUIRI_URL',\s\).*)|\1'${ip}'\)|g" ./wp-config.php
+sed -i "s|\('DAIQUIRI_URL',\s\).*)|\1'http://${ip}'\)|g" ./wp-config.php
 
 # Daiquiri theme and plugin
 clone https://github.com/django-daiquiri/wordpress-plugin ./wp-content/plugins/daiquiri
