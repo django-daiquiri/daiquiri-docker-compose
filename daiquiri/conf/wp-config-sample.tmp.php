@@ -47,14 +47,14 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         'put your unique phrase here' );
-define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
-define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
-define( 'NONCE_KEY',        'put your unique phrase here' );
-define( 'AUTH_SALT',        'put your unique phrase here' );
-define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
-define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
-define( 'NONCE_SALT',       'put your unique phrase here' );
+define('AUTH_KEY',         'put your unique phrase here');
+define('SECURE_AUTH_KEY',  'put your unique phrase here');
+define('LOGGED_IN_KEY',    'put your unique phrase here');
+define('NONCE_KEY',        'put your unique phrase here');
+define('AUTH_SALT',        'put your unique phrase here');
+define('SECURE_AUTH_SALT', 'put your unique phrase here');
+define('LOGGED_IN_SALT',   'put your unique phrase here');
+define('NONCE_SALT',       'put your unique phrase here');
 
 /**#@-*/
 
@@ -79,9 +79,8 @@ $table_prefix  = 'wp_';
  * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
 
-
- define('WP_DEBUG', true);
- define( 'SCRIPT_DEBUG', true );
+define('WP_DEBUG', true);
+define('SCRIPT_DEBUG', true );
 
 #if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
 #     $_SERVER['HTTPS'] = 'on';
@@ -92,17 +91,17 @@ $table_prefix  = 'wp_';
 
 define('CONCATENATE_SCRIPTS', false);
 
-# define( 'WP_HOME', <WORDPRESS_URL> );
-# define( 'WP_SITEURL', <SITE_URL>);
+define('WP_HOME', '<GENERIC_PLACEHOLDER>' );
+define('WP_SITEURL', '<GENERIC_PLACEHOLDER>');
 
 define('DAIQUIRI_DEBUG', True);
 define('DAIQUIRI_URL', '<GENERIC_PLACEHOLDER>');
 
 
-define('COOKIEPATH','/cms');
-define('SITECOOKIEPATH',COOKIEPATH);
-define('ADMIN_COOKIE_PATH',COOKIEPATH);
-define('PLUGINS_COOKIE_PATH',COOKIEPATH);
+define('COOKIEPATH', '/cms');
+define('SITECOOKIEPATH', COOKIEPATH);
+define('ADMIN_COOKIE_PATH', COOKIEPATH);
+define('PLUGINS_COOKIE_PATH', COOKIEPATH);
 
 /* That's all, stop editing! Happy blogging. */
 

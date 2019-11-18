@@ -5,7 +5,8 @@ source "${scriptdir}/source.sh"
 
 cd ${VOL}/wp
 
-if [ ! -e wp-config.php ]; then
+# install wordpress
+if [[ ! -f wp-config.php ]]; then
     echo 'no wordpress found'
     wget https://wordpress.org/latest.tar.gz
     tar xzvf latest.tar.gz
@@ -14,18 +15,15 @@ if [ ! -e wp-config.php ]; then
     rm -R wordpress
 fi
 
+# wordpress config setup
 if [[ ! -f ./wp-config.php ]]; then
-    cp /tmp/wp-config-sample.php ./wp-config.php
+    cp "/tmp/wp-config-sample.php" "${VOL}/wp/wp-config.php"
 fi
+replace_in_wpconfig "DAIQUIRI_URL" "//$(get_container_ip "dq-daiquiri")"
+replace_in_wpconfig "WP_HOME" "//localhost:${FINALLY_EXPOSED_PORT}/cms"
+replace_in_wpconfig "WP_SITEURL" "//localhost:${FINALLY_EXPOSED_PORT}/cms"
 
-ip=$(
-ping -c 1 dq-daiquiri \
-    | grep -Po "([0-9]{1,3}[\.]){3}[0-9]{1,3}" \
-    | head -n 1
-)
-sed -i "s|\('DAIQUIRI_URL',\s\).*)|\1'http://${ip}'\)|g" ./wp-config.php
-
-# Daiquiri theme and plugin
+# daiquiri theme and plugin
 clone https://github.com/django-daiquiri/wordpress-plugin ./wp-content/plugins/daiquiri
 clone https://github.com/django-daiquiri/wordpress-theme ./wp-content/themes/daiquiri
 
