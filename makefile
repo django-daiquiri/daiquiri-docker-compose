@@ -2,8 +2,6 @@ CURDIR=$(shell pwd)
 DC_MASTER="dc_master.yaml"
 DC_TEMP="docker-compose.yaml"
 
-SAMPLE_LOCAL=$(shell if [ -f settings/sample.local.tmp.py ]; then echo settings/sample.local.tmp.py; else echo settings/sample.env.tmp.py; fi)
-
 VARS_ENV=$(shell if [ -f settings/app.local ]; then echo settings/app.local; else echo settings/app.env; fi)
 FINALLY_EXPOSED_PORT=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=FINALLY_EXPOSED_PORT=)[0-9]+")
 GLOBAL_PREFIX=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=GLOBAL_PREFIX=).*")
@@ -74,17 +72,24 @@ preparations:
 		> ${DC_TEMP}
 
 	# Reverse proxy nginx conf
-	# cat ${CURDIR}/nginx/conf/vhost.tmp.conf \
-	# | sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-	# | sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
-	# > ${CURDIR}/nginx/conf/vhost.conf
+	cat ${CURDIR}/nginx_rp/conf/server.tmp.conf \
+	  | sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+	  | sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
+	  | sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
+	 > ${CURDIR}/nginx_rp/conf/server.conf
 
 	# Wordpress
-	# apache2
+	# httpd
+	cat ${CURDIR}/daiquiri/conf/httpd.tmp.conf \
+		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+	> ${CURDIR}/daiquiri/rootfs/etc/httpd/conf/httpd.conf
+
+	# vhost
+	mkdir -p ${CURDIR}/daiquiri/rootfs/etc/httpd/vhosts.d
 	cat ${CURDIR}/daiquiri/conf/vhost.tmp.conf \
-	| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-	| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
-	| sed 's|<SITE_URL>|${SITE_URL}|g' \
+		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+		| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
+		| sed 's|<SITE_URL>|${SITE_URL}|g' \
 	> ${CURDIR}/daiquiri/rootfs/etc/httpd/vhosts.d/vhost.conf
 
 	# wp-config.php
@@ -114,7 +119,7 @@ run_down:
 	docker-compose -f ./docker-compose.yaml down -v
 
 run_remove:
-	docker-compose down --rmi all
+	docker-compose down
 	docker-compose down -v
 	docker-compose rm --force
 

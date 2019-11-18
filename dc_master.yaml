@@ -67,8 +67,6 @@ services:
         links:
             - postgresdata
             - wpdb
-        ports:
-            - "<FINALLY_EXPOSED_PORT>:80"
         volumes:
             - log:/vol/log
             - download:/vol/download
@@ -79,6 +77,21 @@ services:
         restart: always
         env_file:
             - <VARIABLES_FILE>
+
+    proxyreverse:
+        build:
+            context: ./nginx_rp
+        container_name: <GLOBAL_PREFIX>proxy
+        ports:
+            - "<FINALLY_EXPOSED_PORT>:80"
+        depends_on:
+            - daiquiri
+        volumes:
+            - daiquiri:/vol/daiquiri
+  
+        restart: always
+        env_file:
+            - <VARIABLES_DB_APP>
 
     postgresapp:
         build:

@@ -1,0 +1,30 @@
+FROM alpine:latest
+
+ENV SRV="/srv"
+ENV SRVDIR="/srv/www"
+
+RUN apk add --update nginx && \
+    rm -rf /var/cache/apk/* && \
+    chown -R nginx:www-data /var/lib/nginx
+
+RUN apk add --update curl
+
+RUN mkdir -p /etc/nginx/conf.d
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
+RUN rm -f /etc/nginx/conf.d/*
+COPY ./conf/server.conf /etc/nginx/conf.d/server.conf
+
+RUN mkdir -p "${SRVDIR}"
+
+RUN set -x; \
+    addgroup -g 82 -S www-data; \
+    adduser -u 82 -D -S -G www-data www-data && exit 0; exit 1
+
+
+RUN find ${SRVDIR} -type d -exec chmod g+rx {} + \
+ && find ${SRVDIR} -type d -exec chown www-data:www-data {} + \
+ && find ${SRVDIR} -type f -exec chown www-data:www-data {} + \
+ && chmod -R 755 ${SRV}
+
+CMD ["nginx"]
