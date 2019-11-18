@@ -74,6 +74,7 @@ preparations:
 	# Reverse proxy nginx conf
 	cat ${CURDIR}/nginx_rp/conf/server.tmp.conf \
 	  | sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+	  | sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
 	  | sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 	 > ${CURDIR}/nginx_rp/conf/server.conf
 
@@ -82,7 +83,7 @@ preparations:
 	cat ${CURDIR}/daiquiri/conf/httpd.tmp.conf \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 	> ${CURDIR}/daiquiri/rootfs/etc/httpd/conf/httpd.conf
-	
+
 	# vhost
 	cat ${CURDIR}/daiquiri/conf/vhost.tmp.conf \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
@@ -117,7 +118,7 @@ run_down:
 	docker-compose -f ./docker-compose.yaml down -v
 
 run_remove:
-	docker-compose down 
+	docker-compose down
 	docker-compose down -v
 	docker-compose rm --force
 
