@@ -85,6 +85,7 @@ preparations:
 	> ${CURDIR}/daiquiri/rootfs/etc/httpd/conf/httpd.conf
 
 	# vhost
+	mkdir -p ${CURDIR}/daiquiri/rootfs/etc/httpd/vhosts.d
 	cat ${CURDIR}/daiquiri/conf/vhost.tmp.conf \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 		| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
