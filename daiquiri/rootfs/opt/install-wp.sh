@@ -19,9 +19,9 @@ fi
 if [[ ! -f ./wp-config.php ]]; then
     cp "/tmp/wp-config-sample.php" "${VOL}/wp/wp-config.php"
 fi
-replace_in_wpconfig "DAIQUIRI_URL" "//$(get_container_ip "dq-daiquiri")"
-replace_in_wpconfig "WP_HOME" "//localhost:${FINALLY_EXPOSED_PORT}/cms"
-replace_in_wpconfig "WP_SITEURL" "//localhost:${FINALLY_EXPOSED_PORT}/cms"
+replace_in_wpconfig "DAIQUIRI_URL" "http://$(get_container_ip "dq-daiquiri")"
+replace_in_wpconfig "WP_HOME" "http://localhost:${FINALLY_EXPOSED_PORT}/cms"
+replace_in_wpconfig "WP_SITEURL" "http://localhost:${FINALLY_EXPOSED_PORT}/cms"
 
 # daiquiri theme and plugin
 clone https://github.com/django-daiquiri/wordpress-plugin ./wp-content/plugins/daiquiri

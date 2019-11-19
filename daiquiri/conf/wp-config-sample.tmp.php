@@ -18,7 +18,6 @@
  * @package WordPress
  */
 
-
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define('DB_NAME', <WORDPRESS_DB_NAME>);
@@ -90,13 +89,7 @@ define('SCRIPT_DEBUG', true );
 # $_SERVER['SERVER_NAME'] = 'www.astro-nfdi.org';
 
 define('CONCATENATE_SCRIPTS', false);
-
-define('WP_HOME', '<GENERIC_PLACEHOLDER>' );
-define('WP_SITEURL', '<GENERIC_PLACEHOLDER>');
-
 define('DAIQUIRI_DEBUG', True);
-define('DAIQUIRI_URL', '<GENERIC_PLACEHOLDER>');
-
 
 define('COOKIEPATH', '/cms');
 define('SITECOOKIEPATH', COOKIEPATH);
@@ -108,6 +101,10 @@ define('PLUGINS_COOKIE_PATH', COOKIEPATH);
 /** Absolute path to the WordPress directory. */
 # if ( !defined('ABSPATH') )
 # 	define('ABSPATH', dirname(__FILE__) . '/');
+
+define('WP_HOME', '<GENERIC_PLACEHOLDER>' );
+define('WP_SITEURL', '<GENERIC_PLACEHOLDER>');
+define('DAIQUIRI_URL', '<GENERIC_PLACEHOLDER>');
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
