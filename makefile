@@ -80,20 +80,26 @@ preparations:
 
 	# Wordpress
 	# httpd
-	cat ${CURDIR}/daiquiri/conf/httpd.tmp.conf \
+	cat ${CURDIR}/daiquiri/conf/httpd.conf.tpl \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 	> ${CURDIR}/daiquiri/rootfs/etc/httpd/conf/httpd.conf
 
 	# vhost
 	mkdir -p ${CURDIR}/daiquiri/rootfs/etc/httpd/vhosts.d
-	cat ${CURDIR}/daiquiri/conf/vhost.tmp.conf \
+	cat ${CURDIR}/daiquiri/conf/vhost.conf.tpl \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 		| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 		| sed 's|<SITE_URL>|${SITE_URL}|g' \
 	> ${CURDIR}/daiquiri/rootfs/etc/httpd/vhosts.d/vhost.conf
+	cp -f \
+		"${CURDIR}/daiquiri/conf/vhost2.conf.tpl" \
+		"${CURDIR}/daiquiri/rootfs/tmp/vhost2.conf"
+	cp -f \
+		"${CURDIR}/daiquiri/conf/wsgi.py" \
+		"${CURDIR}/daiquiri/rootfs/tmp/wsgi.py"
 
 	# wp-config.php
-	cat ${CURDIR}/daiquiri/conf/wp-config-sample.tmp.php \
+	cat ${CURDIR}/daiquiri/conf/wp-config-sample.php.tpl \
 		| sed 's|<WORDPRESS_URL>|"${WORDPRESS_URL}"|g' \
 		| sed 's|<SITE_URL>|"${SITE_URL}"|g' \
 		| sed 's|<HTTP_HOST>|"${HTTP_HOST}"|g' \

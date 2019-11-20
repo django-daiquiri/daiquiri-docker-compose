@@ -25,3 +25,8 @@ function replace_in_wpconfig(){
     wpc="${VOL}/wp/wp-config.php"
     sed -i "s|\('${str}',\s\).*)|\1'${rep}'\)|g" "${wpc}"
 }
+
+function replace_ip_in_vhost(){
+    dqip=$(get_container_ip "dq-daiquiri")
+    sed -i "s|http://.*|http://${dqip}/|g" "/etc/httpd/vhosts.d/vhost2.conf"
+}
