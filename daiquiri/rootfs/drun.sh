@@ -19,10 +19,7 @@ chown -R daiquiri:apache ${VOL}/daiquiri
 
 cd /vol/daiquiri/${DAIQUIRI_APP}
 
-vh2c="/etc/httpd/vhosts.d/vhost2.conf"
-if [[ ! -f "${vh2c}" ]]; then
-    cp "/tmp/vhost2.conf" "${vh2c}"
-fi
+maybe_copy "/tmp/vhost2.conf" "/etc/httpd/vhosts.d/vhost2.conf"
 replace_ip_in_vhost
 
 
