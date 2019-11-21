@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ${HOME}/.bashrc
+
 # create log directories
 mkdir -p ${VOL}/log/gunicorn/
 touch ${VOL}/log/gunicorn/access.log
@@ -15,9 +17,10 @@ chown -R daiquiri:apache ${VOL}/log/daiquiri
 /opt/install-daiquiri.sh
 chown -R daiquiri:apache ${VOL}/daiquiri
 
-whoami
-
 cd /vol/daiquiri/${DAIQUIRI_APP}
+
+maybe_copy "/tmp/vhost2.conf" "/etc/httpd/vhosts.d/vhost2.conf"
+replace_ip_in_vhost
 
 
 gunicorn --bind 0.0.0.0:9001 \
@@ -28,6 +31,6 @@ gunicorn --bind 0.0.0.0:9001 \
 
 while true; do
     rm -f /var/run/httpd/*.pid
-    /usr/sbin/httpd -D FOREGROUND
+    DQIP=${DQIP} /usr/sbin/httpd -D FOREGROUND
     sleep 10
 done

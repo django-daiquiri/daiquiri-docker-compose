@@ -16,10 +16,10 @@ if [[ ! -f wp-config.php ]]; then
 fi
 
 # wordpress config setup
-if [[ ! -f ./wp-config.php ]]; then
-    cp "/tmp/wp-config-sample.php" "${VOL}/wp/wp-config.php"
-fi
-replace_in_wpconfig "DAIQUIRI_URL" "http://$(get_container_ip "dq-daiquiri")"
+maybe_copy "/tmp/wp-config-sample.php" "${VOL}/wp/wp-config.php"
+
+# replace_in_wpconfig "DAIQUIRI_URL" "http://$(get_container_ip "dq-daiquiri")"
+replace_in_wpconfig "DAIQUIRI_URL" "http://localhost:80"
 replace_in_wpconfig "WP_HOME" "http://localhost:${FINALLY_EXPOSED_PORT}/cms"
 replace_in_wpconfig "WP_SITEURL" "http://localhost:${FINALLY_EXPOSED_PORT}/cms"
 
