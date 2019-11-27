@@ -8,14 +8,9 @@ touch ${VOL}/log/gunicorn/access.log
 mkdir -p ${VOL}/log/daiquiri/
 mkdir -p ${VOL}/log/httpd/
 
-chown -R daiquiri:apache ${VOL}/daiquiri
-
 /opt/install-wp.sh
-chown -R daiquiri:apache ${VOL}/wp
-chown -R daiquiri:apache ${VOL}/log/daiquiri
 
 /opt/install-daiquiri.sh
-chown -R daiquiri:apache ${VOL}/daiquiri
 
 cd /vol/daiquiri/${DAIQUIRI_APP}
 
@@ -30,7 +25,7 @@ gunicorn --bind 0.0.0.0:9001 \
     config.wsgi:application -D
 
 while true; do
-    rm -f /var/run/httpd/*.pid
-    DQIP=${DQIP} /usr/sbin/httpd -D FOREGROUND
+    sudo rm -f /var/run/httpd/*.pid
+    sudo DQIP=${DQIP} /usr/sbin/httpd -D FOREGROUND
     sleep 10
 done

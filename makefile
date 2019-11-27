@@ -2,6 +2,19 @@ CURDIR=$(shell pwd)
 DC_MASTER="dc_master.yaml"
 DC_TEMP="docker-compose.yaml"
 
+DOCKER_IN_GROUPS=$(shell groups | grep "docker")
+MYID=$(shell id -u)
+
+ifeq ($(strip $(DOCKER_IN_GROUPS)),)
+	DC_CMD=sudo docker-compose
+	D_CMD= sudo docker
+else
+	DC_CMD=docker-compose
+	D_CMD=docker
+endif
+
+
+
 VARS_ENV=$(shell if [ -f settings/app.local ]; then echo settings/app.local; else echo settings/app.env; fi)
 FINALLY_EXPOSED_PORT=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=FINALLY_EXPOSED_PORT=)[0-9]+")
 GLOBAL_PREFIX=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=GLOBAL_PREFIX=).*")
@@ -35,13 +48,20 @@ SITE_URL=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=SITE_URL=).*")
 DOCKERHOST=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DOCKERHOST=).*")
 VARS_WP=$(shell if [ -f settings/wp.local ]; then echo settings/wp.local; else echo settings/wp.env; fi)
 
-all: preparations run_build tail_logs
+all: root_check preparations run_build tail_logs
 build: preparations run_build
 fromscratch: preparations run_remove run_build
 remove: run_remove
 restart: run_restart
 down: run_down
 logs: tail_logs
+
+
+root_check:
+			@if [ "${MYID}" = "0" ]; then \
+				echo Do not run as root. Conflicting file permissions will not allow it.; \
+			fi
+			@exit
 
 preparations:
 	mkdir -p ${CURDIR}/vol/postgres-app
@@ -55,8 +75,7 @@ preparations:
 
 	# create log directories
 	mkdir -p ${CURDIR}/vol/log
-	chmod 777 -R ${CURDIR}/vol/log
-
+	
 	# rewrite docker-compose.yaml
 	cat ${DC_MASTER} \
 		| sed 's|<HOME>|${HOME}|g' \
@@ -77,6 +96,12 @@ preparations:
 	  | sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
 	  | sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 	 > ${CURDIR}/nginx_rp/conf/server.conf
+
+	 # set user id in daiquiri dockerfile
+	 cat ${CURDIR}/daiquiri/dockerfile_master \
+	    	| sed 's|<UID>|$(MYID)|g' \
+	    	> ${CURDIR}/daiquiri/dockerfile
+
 
 	# Wordpress
 	# httpd
@@ -116,21 +141,21 @@ preparations:
 	# firewall-cmd --permanent --zone=trusted --change-interface=docker0
 
 run_build:
-	docker-compose up --build -d
+	$(DC_CMD) up --build -d
 
 run_volrm:
-	docker volume ls | xargs sudo docker volume rm
+	$(D_CMD) volume ls | xargs $(D_CMD) volume rm
 
 run_down:
-	docker-compose -f ./docker-compose.yaml down -v
+	$(DC_CMD) -f ./docker-compose.yaml down -v
 
 run_remove:
-	docker-compose down
-	docker-compose down -v
-	docker-compose rm --force
+	$(DC_CMD) down
+	$(DC_CMD) down -v
+	$(DC_CMD) rm --force
 
 tail_logs:
-	docker-compose logs -f
+	$(DC_CMD) logs -f
 
 run_restart:
-	sudo docker-compose restart
+	$(DC_CMD) restart

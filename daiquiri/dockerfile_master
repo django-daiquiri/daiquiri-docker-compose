@@ -1,6 +1,7 @@
 FROM centos:7
 
-ARG UID=1000
+# give daiquiri user same id as the
+ARG UID=<UID>
 
 ENV PATH=/vol/ve/bin:/opt:${PATH}
 
@@ -58,8 +59,10 @@ COPY ./rootfs /
 
 RUN useradd -m -u ${UID} -s /bin/bash daiquiri && \
     usermod -G apache daiquiri
+
 # give daiquiri user sudo permissions without password
 RUN echo "daiquiri ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 USER daiquiri
 
 CMD ["/drun.sh"]

@@ -26,6 +26,3 @@ replace_in_wpconfig "WP_SITEURL" "http://localhost:${FINALLY_EXPOSED_PORT}/cms"
 # daiquiri theme and plugin
 clone https://github.com/django-daiquiri/wordpress-plugin ./wp-content/plugins/daiquiri
 clone https://github.com/django-daiquiri/wordpress-theme ./wp-content/themes/daiquiri
-
-chmod 755 /vol/wp
-chown -R apache:apache ${VOL}/wp
