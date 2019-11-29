@@ -2,15 +2,17 @@
 
 ## Synopsis
 
-This repository contains development setup for the django-daiquiri application. [docker compose](https://github.com/docker/compose/releases) is required to run the containers. If not configured differently the built Daiquiri instance should be available at `dockerhost:9494`. Please see below how setting can be changed.
+This repository contains development setup for the django-daiquiri application. [docker compose](https://github.com/docker/compose/releases) is required to run the containers. If not configured differently the built Daiquiri instance should be available at `localhost:9494`. Please see below how setting can be changed.
 
 ## How to start
 
+The setup should be run as local user. The user should have the privileges to run docker on the local system - add the user to the `docker` group.  
+
 How to use make:
 ```bash
+    git clone https://github.com/django-daiquiri/daiquiri-docker-compose/
+    cd https://github.com/django-daiquiri/daiquiri-docker-compose/
     make                # prepare settings, build and run the docker container
-    make preparations   # fill in the local settings into the docker compose, etc.
-    make down           # stop the container, remove the volumes
 ```
 See more details in the **Configuration and Usage** below. 
 
@@ -18,7 +20,7 @@ See more details in the **Configuration and Usage** below.
 FOUR containers are going to be created running, `daiquiri` and the database dockers.
 
 ### Volumes
-During build four folders later used as volumes will be created under `vol/`. They contain the following:
+During build four folders later used as volumes will be created in `vol/`. They contain the following:
 
 * `daiquiri` daiquiri installation
 * `wp` Wordpress installation
@@ -29,7 +31,6 @@ During build four folders later used as volumes will be created under `vol/`. Th
 * `postgres-app` daiquiri application database
 * `postgres-data` data database
 * `wpdb` Wordpress database
-
 
 ## Configuration and usage
 1. Declare your settings in `*.local`
@@ -48,10 +49,12 @@ During build four folders later used as volumes will be created under `vol/`. Th
 
 1. Run!
 
-    Run the make script will set the settings to the docker-compose master file, build and run the dockers. 
+    Run the make script will set the settings to the docker-compose master file and config files, build and run the dockers. 
 
     ```
-        make
+        make                # prepare settings, build and run the docker container
+        make preparations   # fill in the local settings into the docker compose, etc.
+        make down           # stop the container, remove the volumes
     ```
 
 1. Connect to the daiquiri container
@@ -63,36 +66,25 @@ During build four folders later used as volumes will be created under `vol/`. Th
 
     Now you can use the terminal as on any other machine.
 
-1. Install the Wordpress instance, create superuser
-
-    Install the Wordpress instance via commandline in the docker or by going to 
-    ```shell
-     wp core install --path=/vol/wp --allow-root --url=DOCKERHOST:9494/cms --title=YOURTITLE --admin_user=wpadmin --admin_pass=YOURPASSWORD--admin_email=wpadmin@example.com  
-    ```
-
-    Activate the Daiquiri plugin and choose the Daiquir theme via `<DOCKERHOST>:9494/wp-admin/`
-
+1. Install the Wordpress instance
+    Install the Wordpress instance via`localhost:9494/cms/wp-admin/`. Activate the Daiquiri plugin and choose the Daiquir theme 
+            
 1. Create daiquiri superuser
     Inside the docker container activate the virtual env:
     
     ```shell
-    source /opt/ve.sh
-    cd /vol/daiquiri/app
+    # connect to the docker
+    docker exec -ti dq-daiquiri bash
+    
+    # now in the docker bash
     ./manage.py createsuperuser
+    
+    # or for testing purposes create default admin user
+    ./manage.py create_admin_user
     ```
-    Follow the steps to create a superuser.
-
-    NOTICE: the email verification is set to optional
-    ```shell
-    # switch off email verification
-    ACCOUNT_EMAIL_VERIFICATION='optional'
-    ```
-
-    Set an env variable inside the docker:
-    ```shell
-     `env DEBUG=True`
-    ```
-
+    Follow the steps to create a superuser or create a default admin user for testing purposes. The admin user should not be used in productive setup.
+        
+    
 1. Usefull commands on the docker host
 ```
     docker-compose -f ./docker-compose.yaml up --build -d
