@@ -75,7 +75,7 @@ preparations:
 
 	# create log directories
 	mkdir -p ${CURDIR}/vol/log
-	
+
 	# rewrite docker-compose.yaml
 	cat ${DC_MASTER} \
 		| sed 's|<HOME>|${HOME}|g' \
@@ -91,11 +91,11 @@ preparations:
 		> ${DC_TEMP}
 
 	# Reverse proxy nginx conf
-	cat ${CURDIR}/nginx_rp/conf/server.tmp.conf \
+	cat ${CURDIR}/nginx_rp/conf/server.conf \
 	  | sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 	  | sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
 	  | sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
-	 > ${CURDIR}/nginx_rp/conf/server.conf
+	 > ${CURDIR}/nginx_rp/tmp/server.conf
 
 	 # set user id in daiquiri dockerfile
 	 cat ${CURDIR}/daiquiri/dockerfile_master \
@@ -103,28 +103,29 @@ preparations:
 	    	> ${CURDIR}/daiquiri/dockerfile
 
 
-	# Wordpress
+	mkdir -p ${CURDIR}/daiquiri/rootfs/tmp
 	# httpd
-	cat ${CURDIR}/daiquiri/conf/httpd.conf.tpl \
+	cat ${CURDIR}/daiquiri/conf/httpd.conf \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-	> ${CURDIR}/daiquiri/rootfs/etc/httpd/conf/httpd.conf
+	> ${CURDIR}/daiquiri/rootfs/tmp/httpd.conf
 
 	# vhost
-	mkdir -p ${CURDIR}/daiquiri/rootfs/etc/httpd/vhosts.d
-	cat ${CURDIR}/daiquiri/conf/vhost.conf.tpl \
+	cat ${CURDIR}/daiquiri/conf/vhost.conf \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 		| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 		| sed 's|<SITE_URL>|${SITE_URL}|g' \
-	> ${CURDIR}/daiquiri/rootfs/etc/httpd/vhosts.d/vhost.conf
-	cp -f \
-		"${CURDIR}/daiquiri/conf/vhost2.conf.tpl" \
-		"${CURDIR}/daiquiri/rootfs/tmp/vhost2.conf"
+	> ${CURDIR}/daiquiri/rootfs/tmp/vhost.conf
+
+	# vhost2
+	cat ${CURDIR}/daiquiri/conf/vhost2.conf \
+		| sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
+		${CURDIR}/daiquiri/rootfs/tmp/vhost2.conf
 	cp -f \
 		"${CURDIR}/daiquiri/conf/wsgi.py" \
 		"${CURDIR}/daiquiri/rootfs/tmp/wsgi.py"
 
-	# wp-config.php
-	cat ${CURDIR}/daiquiri/conf/wp-config-sample.php.tpl \
+	# Wordpress
+	cat ${CURDIR}/daiquiri/conf/wp-config-sample.php \
 		| sed 's|<WORDPRESS_URL>|"${WORDPRESS_URL}"|g' \
 		| sed 's|<SITE_URL>|"${SITE_URL}"|g' \
 		| sed 's|<HTTP_HOST>|"${HTTP_HOST}"|g' \

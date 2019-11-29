@@ -8,16 +8,29 @@ function clone(){
         git clone "${url}" "${fol}"
     else
         echo "Pulling ${url}"
-        cd ${fol}
+        cd "${fol}" || exit 1
         git pull
     fi
+}
+
+function does_run(){
+    r="false"
+    if [[ $(ps aux | grep -v "grep" | grep -c "${1}") != "0" ]]; then
+        r="true"
+    fi
+    echo "${r}"
 }
 
 function maybe_copy(){
     source_file="${1}"
     target_file="${2}"
+    if [[ "${3}" == "sudo" ]]; then
+        cmd="sudo cp"
+    else
+        cmd="cp"
+    fi
     if [[ ! -f "${target_file}" ]]; then
-        cmd="cp \"${source_file}\" \"${target_file}\""
+        cmd="${cmd} \"${source_file}\" \"${target_file}\""
         echo "${cmd}"
         eval "${cmd}"
     fi
@@ -33,10 +46,12 @@ function replace_in_wpconfig(){
     str="${1}"
     rep="${2}"
     wpc="${VOL}/wp/wp-config.php"
+    echo "Replace of file ${wpc}"
     sed -i "s|\('${str}',\s\).*)|\1'${rep}'\)|g" "${wpc}"
 }
 
 function replace_ip_in_vhost(){
     dqip="$(get_container_ip "dq-daiquiri"):80"
-    sed -i "s|http://[.0-9a-z:]*|http://${dqip}|g" "/etc/httpd/vhosts.d/vhost2.conf"
+    echo "Replace of file /etc/httpd/vhosts.d/vhost2.conf"
+    sudo sed -i "s|http://[.0-9a-z:]*|http://${dqip}|g" "/etc/httpd/vhosts.d/vhost2.conf"
 }

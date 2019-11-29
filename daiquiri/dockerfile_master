@@ -55,7 +55,9 @@ RUN pip3 install gunicorn
 RUN rm /etc/httpd/conf.d/*
 
 COPY ./rootfs /
-
+RUN mkdir -p /etc/httpd/vhosts.d
+COPY ./conf/vhost.conf /etc/httpd/vhosts.d/vhost.conf
+COPY /conf/httpd.conf /etc/httpd/conf/httpd.conf
 
 RUN useradd -m -u ${UID} -s /bin/bash daiquiri && \
     usermod -G apache daiquiri

@@ -1,5 +1,6 @@
 FROM centos:7
 
+# give daiquiri user same id as the
 ARG UID=1000
 
 ENV PATH=/vol/ve/bin:/opt:${PATH}
@@ -54,12 +55,16 @@ RUN pip3 install gunicorn
 RUN rm /etc/httpd/conf.d/*
 
 COPY ./rootfs /
-
+RUN mkdir -p /etc/httpd/vhosts.d
+COPY ./conf/vhost.conf /etc/httpd/vhosts.d/vhost.conf
+COPY /conf/httpd.conf /etc/httpd/conf/httpd.conf
 
 RUN useradd -m -u ${UID} -s /bin/bash daiquiri && \
     usermod -G apache daiquiri
+
 # give daiquiri user sudo permissions without password
 RUN echo "daiquiri ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 USER daiquiri
 
 CMD ["/drun.sh"]

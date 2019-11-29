@@ -3,7 +3,7 @@
 scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "${scriptdir}/source.sh"
 
-cd ${VOL}/wp
+cd "${VOL}/wp" || exit 1
 
 # install wordpress
 if [[ ! -f wp-config.php ]]; then

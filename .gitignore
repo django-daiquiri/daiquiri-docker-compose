@@ -1,11 +1,7 @@
-daiquiri-centos/
+tmp/
 vol/
+
+daiquiri/dockerfile
 *.local
 docker-compose.yaml
 notes.md
-settings/sample.local.tmp.py
-
-daiquiri/rootfs/etc/
-daiquiri/rootfs/tmp/
-
-nginx_rp/conf/server.conf
