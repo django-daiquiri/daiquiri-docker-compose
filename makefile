@@ -91,6 +91,7 @@ preparations:
 		> ${DC_TEMP}
 
 	# Reverse proxy nginx conf
+	mkdir -p ${CURDIR}/nginx_rp/tmp
 	cat ${CURDIR}/nginx_rp/conf/server.conf \
 	  | sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 	  | sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
