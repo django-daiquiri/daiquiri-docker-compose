@@ -120,7 +120,7 @@ preparations:
 	# vhost2
 	cat ${CURDIR}/daiquiri/conf/vhost2.conf \
 		| sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
-		${CURDIR}/daiquiri/rootfs/tmp/vhost2.conf
+		> ${CURDIR}/daiquiri/rootfs/tmp/vhost2.conf
 	cp -f \
 		"${CURDIR}/daiquiri/conf/wsgi.py" \
 		"${CURDIR}/daiquiri/rootfs/tmp/wsgi.py"
