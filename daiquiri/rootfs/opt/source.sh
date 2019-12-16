@@ -37,9 +37,7 @@ function maybe_copy(){
 }
 
 function get_container_ip(){
-    ping -c 1 "${1}" \
-        | grep -Po "([0-9]{1,3}[\.]){3}[0-9]{1,3}" \
-        | head -n 1
+    hostname -I | awk '{print $1}'
 }
 
 function replace_in_wpconfig(){
@@ -51,7 +49,7 @@ function replace_in_wpconfig(){
 }
 
 function replace_ip_in_vhost(){
-    dqip="$(get_container_ip "dq-daiquiri"):80"
+    dqip="$(get_container_ip):80"
     echo "Replace of file /etc/httpd/vhosts.d/vhost2.conf"
     sudo sed -i "s|http://[.0-9a-z:]*|http://${dqip}|g" "/etc/httpd/vhosts.d/vhost2.conf"
 }
