@@ -6,10 +6,6 @@ function clone(){
     if [[ ! -d "${fol}" ]]; then
         echo "Cloning ${url}"
         git clone "${url}" "${fol}"
-    else
-        echo "Pulling ${url}"
-        cd "${fol}" || exit 1
-        git pull
     fi
 }
 
