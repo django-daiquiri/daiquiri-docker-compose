@@ -91,7 +91,7 @@ define('SCRIPT_DEBUG', true );
 define('CONCATENATE_SCRIPTS', false);
 define('DAIQUIRI_DEBUG', True);
 
-define('COOKIEPATH', '/cms');
+define('COOKIEPATH', '/');
 define('SITECOOKIEPATH', COOKIEPATH);
 define('ADMIN_COOKIE_PATH', COOKIEPATH);
 define('PLUGINS_COOKIE_PATH', COOKIEPATH);

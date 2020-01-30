@@ -3,6 +3,7 @@
 scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "${scriptdir}/source.sh"
 
+
 cd "${VOL}/wp" || exit 1
 
 # install wordpress
@@ -26,3 +27,6 @@ replace_in_wpconfig "WP_SITEURL" "http://localhost:${FINALLY_EXPOSED_PORT}/cms"
 # daiquiri theme and plugin
 clone https://github.com/django-daiquiri/wordpress-plugin ./wp-content/plugins/daiquiri
 clone https://github.com/django-daiquiri/wordpress-theme ./wp-content/themes/daiquiri
+
+sudo chown -R daiquiri:apache "${VOL}/wp"
+sudo chmod -R u=rwx,g=rwx "${VOL}/wp"

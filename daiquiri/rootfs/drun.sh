@@ -10,8 +10,15 @@ mkdir -p "${VOL}/log/httpd"
 
 /opt/install-wp.sh
 /opt/install-daiquiri.sh
-
+  
+sudo chown daiquiri:daiquiri /home/daiquiri/
 cd "${VOL}/daiquiri/${DAIQUIRI_APP}" || exit 1
+
+# install custom and fixture app scripts if there
+if [ -f "${VOL}/daiquiri/${DAIQUIRI_APP}/install-custom.sh" ]; then
+    echo "Running ${DAIQUIRI_APP} custom installation and fixture script..."
+    ${VOL}/daiquiri/${DAIQUIRI_APP}/install-custom.sh
+fi
 
 sudo mkdir -p "/etc/httpd/vhosts.d"
 maybe_copy "/tmp/vhost2.conf" "/etc/httpd/vhosts.d/vhost2.conf" "sudo"
