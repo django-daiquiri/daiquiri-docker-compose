@@ -8,10 +8,10 @@ touch "${VOL}/log/gunicorn/access.log"
 mkdir -p "${VOL}/log/daiquiri"
 mkdir -p "${VOL}/log/httpd"
 
+sudo chown daiquiri:daiquiri /home/daiquiri/
 /opt/install-wp.sh
 /opt/install-daiquiri.sh
   
-sudo chown daiquiri:daiquiri /home/daiquiri/
 cd "${VOL}/daiquiri/${DAIQUIRI_APP}" || exit 1
 
 # install custom and fixture app scripts if there

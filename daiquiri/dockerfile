@@ -56,6 +56,7 @@ RUN pip3 install gunicorn
 RUN rm /etc/httpd/conf.d/*
 
 COPY ./rootfs /
+RUN chmod -R 777 /tmp
 RUN mkdir -p /etc/httpd/vhosts.d
 COPY ./conf/vhost.conf /etc/httpd/vhosts.d/vhost.conf
 COPY /conf/httpd.conf /etc/httpd/conf/httpd.conf
