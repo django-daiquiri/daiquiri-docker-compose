@@ -11,7 +11,7 @@ The setup should be run as local user. The user should have the privileges to ru
 How to use make:
 ```bash
     git clone https://github.com/django-daiquiri/daiquiri-docker-compose/
-    cd https://github.com/django-daiquiri/daiquiri-docker-compose/
+    cd daiquiri-docker-compose/
     make                # prepare settings, build and run the docker container
 ```
 See more details in the **Configuration and Usage** below. 
