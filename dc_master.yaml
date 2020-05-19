@@ -97,6 +97,8 @@ services:
         build:
             context: ./postgresapp
         container_name: <GLOBAL_PREFIX>postgresapp
+        <POSTGRES_APP_EXPOSE>
+            <POSTGRES_APP_EXPOSE_PORT>
         volumes:
             - postgresapp:/var/lib/postgresql/data
         restart: always
@@ -107,6 +109,8 @@ services:
         build:
             context: ./postgresdata
         container_name: <GLOBAL_PREFIX>postgresdata
+        <POSTGRES_DATA_EXPOSE>
+            <POSTGRES_DATA_EXPOSE_PORT>
         volumes:
             - postgresdata:/var/lib/postgresql/data
         restart: always

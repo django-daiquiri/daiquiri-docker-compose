@@ -29,12 +29,19 @@ POSTGRES_APP_USER=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_
 POSTGRES_APP_PASSWORD=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_PASSWORD=).*")
 POSTGRES_APP_HOST=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_HOST=).*")
 POSTGRES_APP_PORT=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_PORT=)[0-9]+")
+PGEXP_APP=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_APP_EXPOSE_PORT=)[0-9]+")
+POSTGRES_APP_EXPOSE=$(shell if [ -n "${PGEXP_APP}" ]; then echo "ports:"; else echo ""; fi)
+POSTGRES_APP_EXPOSE_PORT=$(shell if [ -n "${PGEXP_APP}" ]; then echo "- \"${PGEXP_APP}:${POSTGRES_APP_PORT}\""; else echo ""; fi)
+
 VARS_DB_DATA=$(shell if [ -f settings/postgresdata.local ]; then echo settings/postgresdata.local; else echo settings/postgresdata.env; fi)
 POSTGRES_DATA_DB=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_DB=).*")
 POSTGRES_DATA_USER=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_USER=).*")
 POSTGRES_DATA_PASSWORD=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_PASSWORD=).*")
 POSTGRES_DATA_HOST=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_HOST=).*")
 POSTGRES_DATA_PORT=$(shell cat ${CURDIR}/${VARS_DB_APP} | grep -Po "(?<=POSTGRES_PORT=)[0-9]+")
+PGEXP_DATA=$(shell cat ${CURDIR}/${VARS_DB_DATA} | grep -Po "(?<=POSTGRES_DATA_EXPOSE_PORT=)[0-9]+")
+POSTGRES_DATA_EXPOSE=$(shell if [ -n "${PGEXP_DATA}" ]; then echo "ports:"; else echo ""; fi)
+POSTGRES_DATA_EXPOSE_PORT=$(shell if [ -n "${PGEXP_DATA}" ]; then echo "- \"${PGEXP_DATA}:${POSTGRES_DATA_PORT}\""; else echo ""; fi)
 
 # WP
 WORDPRESS_DB_USER=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=WORDPRESS_DB_USER=).*")
@@ -48,20 +55,39 @@ SITE_URL=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=SITE_URL=).*")
 DOCKERHOST=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DOCKERHOST=).*")
 VARS_WP=$(shell if [ -f settings/wp.local ]; then echo settings/wp.local; else echo settings/wp.env; fi)
 
-all: root_check preparations run_build tail_logs
-build: preparations run_build
-fromscratch: preparations run_remove run_build
+all: root_check render_yaml preparations run_build tail_logs
+build: render_yaml preparations run_build
+fromscratch: render_yaml preparations run_remove run_build
 remove: run_remove
 restart: run_restart
 down: run_down
 logs: tail_logs
-
+yaml: render_yaml
 
 root_check:
 			@if [ "${MYID}" = "0" ]; then \
 				echo Do not run as root. Conflicting file permissions will not allow it.; \
 			fi
 			@exit
+
+render_yaml:
+	# rewrite docker-compose.yaml
+	cat ${DC_MASTER} \
+		| sed 's|<HOME>|${HOME}|g' \
+		| sed 's|<CURDIR>|${CURDIR}|g' \
+		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+		| sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
+		| sed 's|<VARIABLES_FILE>|${VARS_ENV}|g' \
+		| sed 's|<VARIABLES_DB_APP>|${VARS_DB_APP}|g' \
+		| sed 's|<VARIABLES_DB_DATA>|${VARS_DB_DATA}|g' \
+		| sed 's|<VARIABLES_WP>|${VARS_WP}|g' \
+		| sed 's|<QUERY_DOWNLOAD_DIR>|${QUERY_DOWNLOAD_DIR}|g' \
+		| sed 's|<ARCHIVE_BASE_PATH>|${ARCHIVE_BASE_PATH}|g' \
+		| sed 's|<POSTGRES_APP_EXPOSE>|${POSTGRES_APP_EXPOSE}|g' \
+		| sed 's|<POSTGRES_APP_EXPOSE_PORT>|${POSTGRES_APP_EXPOSE_PORT}|g' \
+		| sed 's|<POSTGRES_DATA_EXPOSE>|${POSTGRES_DATA_EXPOSE}|g' \
+		| sed 's|<POSTGRES_DATA_EXPOSE_PORT>|${POSTGRES_DATA_EXPOSE_PORT}|g' \
+		> ${DC_TEMP}
 
 preparations:
 	mkdir -p ${CURDIR}/vol/postgres-app
@@ -75,20 +101,6 @@ preparations:
 
 	# create log directories
 	mkdir -p ${CURDIR}/vol/log
-
-	# rewrite docker-compose.yaml
-	cat ${DC_MASTER} \
-		| sed 's|<HOME>|${HOME}|g' \
-		| sed 's|<CURDIR>|${CURDIR}|g' \
-		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-		| sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
-		| sed 's|<VARIABLES_FILE>|${VARS_ENV}|g' \
-		| sed 's|<VARIABLES_DB_APP>|${VARS_DB_APP}|g' \
-		| sed 's|<VARIABLES_DB_DATA>|${VARS_DB_DATA}|g' \
-		| sed 's|<VARIABLES_WP>|${VARS_WP}|g' \
-		| sed 's|<QUERY_DOWNLOAD_DIR>|${QUERY_DOWNLOAD_DIR}|g' \
-		| sed 's|<ARCHIVE_BASE_PATH>|${ARCHIVE_BASE_PATH}|g' \
-		> ${DC_TEMP}
 
 	# Reverse proxy nginx conf
 	mkdir -p ${CURDIR}/nginx_rp/tmp
