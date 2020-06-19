@@ -17,6 +17,7 @@ cd "${VOL}/daiquiri/${DAIQUIRI_APP}" || exit 1
 # install custom and fixture app scripts if there
 if [ -f "${VOL}/daiquiri/${DAIQUIRI_APP}/install-custom.sh" ]; then
     echo "Running ${DAIQUIRI_APP} custom installation and fixture script..."
+    sudo chmod +x ${VOL}/daiquiri/${DAIQUIRI_APP}/install-custom.sh
     ${VOL}/daiquiri/${DAIQUIRI_APP}/install-custom.sh
 fi
 

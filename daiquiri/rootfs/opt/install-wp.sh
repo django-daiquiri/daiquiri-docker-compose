@@ -28,5 +28,11 @@ replace_in_wpconfig "WP_SITEURL" "http://localhost:${FINALLY_EXPOSED_PORT}/cms"
 clone https://github.com/django-daiquiri/wordpress-plugin ./wp-content/plugins/daiquiri
 clone https://github.com/django-daiquiri/wordpress-theme ./wp-content/themes/daiquiri
 
+# setup WordPress
 sudo chown -R daiquiri:apache "${VOL}/wp"
 sudo chmod -R u=rwx,g=rwx "${VOL}/wp"
+cd "${VOL}/wp"
+sudo mkdir wp-content/menus
+sudo chown daiquiri:apache wp-content/menus
+sudo chmod 775 wp-content/menus
+
