@@ -105,12 +105,12 @@ If the docker on your system (mis)behaves strangely, use following script to end
 
 **WARNING: do not use it on your productive system**
 ```bash
-    docker stop $(sudo docker ps -aq)
-    docker rm $(sudo docker ps -aq)
+    docker stop $(docker ps -aq)
+    docker rm $(docker ps -aq)
     docker network prune -f
-    docker rmi -f $(sudo docker images --filter dangling=true -qa)
-    docker volume rm $(sudo docker volume ls --filter dangling=true -q)
-    docker rmi -f $(sudo docker images -qa)
+    docker rmi -f $(docker images --filter dangling=true -qa)
+    docker volume rm $(docker volume ls --filter dangling=true -q)
+    docker rmi -f $(docker images -qa)
 ```
 
 ## Multiple Daiquiri instances on a single docker host
