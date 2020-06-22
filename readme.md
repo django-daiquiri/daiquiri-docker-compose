@@ -36,12 +36,13 @@ During build four folders later used as volumes will be created in `vol/`. They 
 1. Declare your settings in `*.local`
 
     Default settings are stored in the `settings/` folder. all `*.env` files are overwritten with each pull. To keep the local changes, copy `settings/app.env` file to `settings/app.local` and edit it. Same goes for the 
-    DB settings in `var/postgresapp.env` and `var/postgresdata.env`
+    DB settings in `settings/postgresapp.env`, `settings/postgresdata.env` and `settings/wp.env`
     ```shell
         cd settings
         cp app.env app.local    #settings for the app: URL, DB access, etc.
         cp postgresapp.env postgressapp.local # daiquiri app DB settings
         cp postgredata.env postgresdata.local # daiquiri data DB settings
+        cp wp.env wp.local # wordpress data DB settings
     ```
     The `makefile` will use the `*local*` file if such a file exists. 
 
