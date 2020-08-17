@@ -21,6 +21,7 @@ GLOBAL_PREFIX=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=GLOBAL_PREFIX=).
 QUERY_DOWNLOAD_DIR=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=QUERY_DOWNLOAD_DIR=).*")
 ARCHIVE_BASE_PATH=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=ARCHIVE_BASE_PATH=).*")
 DAIQUIRI_APP=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DAIQUIRI_APP=).*")
+DAIQUIRI_APP_FOLDER=$(shell cat ${CURDIR}/${VARS_ENV} | grep -Po "(?<=DAIQUIRI_APP_FOLDER=).*")
 
 # Postgres data and app
 VARS_DB_APP=$(shell if [ -f settings/postgresapp.local ]; then echo settings/postgresapp.local; else echo settings/postgresapp.env; fi)
@@ -76,6 +77,7 @@ render_yaml:
 		| sed 's|<HOME>|${HOME}|g' \
 		| sed 's|<CURDIR>|${CURDIR}|g' \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
+		| sed 's|<DAIQUIRI_APP_FOLDER>|${DAIQUIRI_APP_FOLDER}|g' \
 		| sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
 		| sed 's|<VARIABLES_FILE>|${VARS_ENV}|g' \
 		| sed 's|<VARIABLES_DB_APP>|${VARS_DB_APP}|g' \
@@ -107,7 +109,6 @@ preparations:
 	cat ${CURDIR}/nginx_rp/conf/server.conf \
 	  | sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
 	  | sed 's|<FINALLY_EXPOSED_PORT>|${FINALLY_EXPOSED_PORT}|g' \
-	  | sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 	 > ${CURDIR}/nginx_rp/tmp/server.conf
 
 	 # set user id in daiquiri dockerfile
@@ -125,7 +126,6 @@ preparations:
 	# vhost
 	cat ${CURDIR}/daiquiri/conf/vhost.conf \
 		| sed 's|<GLOBAL_PREFIX>|${GLOBAL_PREFIX}|g' \
-		| sed 's|<DAIQUIRI_APP>|${DAIQUIRI_APP}|g' \
 		| sed 's|<SITE_URL>|${SITE_URL}|g' \
 	> ${CURDIR}/daiquiri/rootfs/tmp/vhost.conf
 

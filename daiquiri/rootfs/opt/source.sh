@@ -3,6 +3,8 @@
 function clone(){
     url="${1}"
     fol="${2}"
+    echo "${url}"
+    echo "$fol"
     if [[ ! -d "${fol}" ]]; then
         echo "Cloning ${url}"
         git clone "${url}" "${fol}"

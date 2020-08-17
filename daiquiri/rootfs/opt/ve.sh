@@ -6,7 +6,7 @@ if [[ ! -f "${VE}/bin/activate" ]]; then
     virtualenv -p python3 ve
 fi
 source "${VE}/bin/activate"
-if [[ -d "${VOL}/daiquiri/${DAIQUIRI_APP}" ]]; then
-  echo "Changing into ${VOL}/daiquiri/${DAIQUIRI_APP}"
-  cd "${VOL}/daiquiri/${DAIQUIRI_APP}" || exit 1
+if [[ -d "${VOL}/app" ]]; then
+  echo "Changing into ${VOL}/app"
+  cd "${VOL}/app" || exit 1
 fi

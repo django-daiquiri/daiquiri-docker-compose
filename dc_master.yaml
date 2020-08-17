@@ -37,6 +37,12 @@ volumes:
             type: none
             device: <CURDIR>/vol/daiquiri
             o: bind
+    app:
+        name: <GLOBAL_PREFIX>app
+        driver_opts:
+            type: none
+            device: <DAIQUIRI_APP_FOLDER>
+            o: bind
     ve:
         name: <GLOBAL_PREFIX>ve
         driver_opts:
@@ -72,6 +78,7 @@ services:
             - download:/vol/download
             - files:/vol/files
             - daiquiri:/vol/daiquiri
+            - app:/vol/app
             - ve:/vol/ve
             - wp:/vol/wp
         restart: always
